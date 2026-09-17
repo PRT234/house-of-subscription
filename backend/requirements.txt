@@ -12,3 +12,6 @@ django-redis==5.4.0
 Pillow==10.4.0
 google-auth==2.35.0
 requests==2.32.3
+PyMuPDF==1.24.10
+google-generativeai==0.8.2
+cryptography>=42.0.0

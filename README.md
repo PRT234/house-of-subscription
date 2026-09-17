@@ -156,12 +156,20 @@ Open `http://localhost:3000` in your browser.
 - [x] Financial analytics with category bar charts and 6-month projections
 - [x] PWA manifest and service worker configuration
 
-### Pass 2: Future Roadmap
+### Pass 2: Import System, BYOK & Known Services
+- [x] 150+ Known Services catalog with Clearbit logos, categories, and cancel URLs
+- [x] Service search endpoint (`GET /api/services/search?q=`) and database indexing
+- [x] Real-time debounced autocomplete in subscription form with autofill
+- [x] Client-side CSV import with PapaParse, column mapping, and 3-row preview
+- [x] Bank & credit card statement import with PyMuPDF (fitz) and Gemini 2.0 Flash
+- [x] Bring-Your-Own-Key (BYOK) settings with Fernet 128-bit AES encryption
+- [x] User preferences configuration (currency, alert thresholds, notifications)
+- [x] Data export to JSON and CSV formats
+
+### Future Roadmap
 - [ ] Automated email reminders via Resend API
-- [ ] AI-assisted receipt and email invoice parsing with Google Gemini
-- [ ] Cancellation assistant with one-click cancellation guides
+- [ ] Cancellation assistant with one-click direct automation
 - [ ] Multi-currency conversion via real-time exchange rates
-- [ ] Export to CSV, JSON, and PDF summary reports
 
 ---
 

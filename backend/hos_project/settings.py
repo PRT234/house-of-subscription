@@ -122,9 +122,9 @@ JWT_EXPIRY_HOURS = 24
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', '')
 
-# Gemini (for later passes)
+# Gemini & Encryption
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
-ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')  # Fernet key
+ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY') or 'g_kYoONNJJtZ76OpSmQP6hGAjQ-ao1IqeukVYonDfeA='
 
 # Resend (for later passes)
 RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')

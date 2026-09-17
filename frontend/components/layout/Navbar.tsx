@@ -9,6 +9,8 @@ import {
   CreditCard,
   Calendar as CalendarIcon,
   BarChart3,
+  UploadCloud,
+  Settings as SettingsIcon,
   LogOut,
   User as UserIcon,
   Menu,
@@ -21,6 +23,8 @@ const NAV_ITEMS = [
   { href: '/subscriptions', label: 'Subscriptions', icon: CreditCard },
   { href: '/calendar', label: 'Calendar', icon: CalendarIcon },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
+  { href: '/import', label: 'Import', icon: UploadCloud },
+  { href: '/settings', label: 'Settings', icon: SettingsIcon },
 ];
 
 export const Navbar: React.FC = () => {

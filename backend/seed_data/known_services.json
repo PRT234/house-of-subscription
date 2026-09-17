@@ -2,101 +2,1193 @@
   {
     "name": "Netflix",
     "category": "entertainment",
-    "logo_url": "https://assets.nflxext.com/ffe/siteui/common/icons/nficon2016.ico",
-    "default_cost": 649.00,
+    "logo_url": "https://logo.clearbit.com/netflix.com",
+    "default_cost": 649,
     "currency": "INR",
-    "cancel_url": "https://www.netflix.com/cancelplan",
-    "cancel_steps": "1. Go to Account page. 2. Under Membership & Billing, select Cancel Membership. 3. Confirm cancellation.",
-    "aliases": ["netflix", "nflx", "netflix premium", "netflix india"]
-  },
-  {
-    "name": "Spotify",
-    "category": "music",
-    "logo_url": "https://open.spotifycdn.com/cdn/images/favicon32.8e66b099.png",
-    "default_cost": 119.00,
-    "currency": "INR",
-    "cancel_url": "https://www.spotify.com/account/subscription/",
-    "cancel_steps": "1. Log into your Spotify account page. 2. Under Your plan, click Change plan. 3. Scroll to Cancel Spotify and click Cancel Premium.",
-    "aliases": ["spotify", "spotify premium", "spotify music"]
-  },
-  {
-    "name": "YouTube Premium",
-    "category": "entertainment",
-    "logo_url": "https://www.youtube.com/s/desktop/4f801691/img/favicon.ico",
-    "default_cost": 129.00,
-    "currency": "INR",
-    "cancel_url": "https://www.youtube.com/paid_memberships",
-    "cancel_steps": "1. Go to Purchases and Memberships. 2. Click Manage membership next to YouTube Premium. 3. Select Deactivate.",
-    "aliases": ["youtube", "youtube premium", "yt premium", "youtube music"]
-  },
-  {
-    "name": "Amazon Prime",
-    "category": "entertainment",
-    "logo_url": "https://www.amazon.in/favicon.ico",
-    "default_cost": 299.00,
-    "currency": "INR",
-    "cancel_url": "https://www.amazon.in/mc/manage",
-    "cancel_steps": "1. Go to Manage Prime Membership. 2. Select End Membership and Benefits. 3. Confirm cancellation.",
-    "aliases": ["prime", "amazon prime", "prime video", "amazon"]
-  },
-  {
-    "name": "ChatGPT Plus",
-    "category": "ai",
-    "logo_url": "https://chatgpt.com/favicon.ico",
-    "default_cost": 1650.00,
-    "currency": "INR",
-    "cancel_url": "https://chatgpt.com/#settings/Subscription",
-    "cancel_steps": "1. Click profile icon in bottom-left. 2. Select Settings -> Subscription. 3. Click Manage -> Cancel plan.",
-    "aliases": ["chatgpt", "chatgpt plus", "openai", "gpt-4", "gpt4"]
-  },
-  {
-    "name": "Claude Pro",
-    "category": "ai",
-    "logo_url": "https://claude.ai/favicon.ico",
-    "default_cost": 1650.00,
-    "currency": "INR",
-    "cancel_url": "https://claude.ai/settings/billing",
-    "cancel_steps": "1. Open Claude settings. 2. Go to Billing. 3. Click Cancel Subscription.",
-    "aliases": ["claude", "claude pro", "anthropic"]
-  },
-  {
-    "name": "GitHub Copilot",
-    "category": "software",
-    "logo_url": "https://github.githubassets.com/favicons/favicon.png",
-    "default_cost": 830.00,
-    "currency": "INR",
-    "cancel_url": "https://github.com/settings/billing",
-    "cancel_steps": "1. Go to GitHub Settings -> Billing and plans. 2. Find GitHub Copilot and click Edit -> Cancel Copilot.",
-    "aliases": ["copilot", "github copilot", "gh copilot"]
-  },
-  {
-    "name": "Google One",
-    "category": "cloud",
-    "logo_url": "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png",
-    "default_cost": 130.00,
-    "currency": "INR",
-    "cancel_url": "https://one.google.com/settings",
-    "cancel_steps": "1. Go to Google One settings. 2. Click Cancel membership. 3. Follow confirmation prompts.",
-    "aliases": ["google drive", "google one", "gdrive", "google cloud"]
-  },
-  {
-    "name": "iCloud+",
-    "category": "cloud",
-    "logo_url": "https://www.apple.com/favicon.ico",
-    "default_cost": 75.00,
-    "currency": "INR",
-    "cancel_url": "https://support.apple.com/HT207594",
-    "cancel_steps": "1. On Apple device, go to Settings -> Apple ID -> iCloud. 2. Tap Manage Account Storage -> Change Storage Plan -> Downgrade Options.",
-    "aliases": ["icloud", "icloud+", "apple storage"]
+    "cancel_url": "https://www.netflix.com/cancelplan"
   },
   {
     "name": "Disney+ Hotstar",
     "category": "entertainment",
-    "logo_url": "https://www.hotstar.com/favicon.ico",
-    "default_cost": 299.00,
+    "logo_url": "https://logo.clearbit.com/hotstar.com",
+    "default_cost": 299,
     "currency": "INR",
-    "cancel_url": "https://www.hotstar.com/in/my-account",
-    "cancel_steps": "1. Go to My Account. 2. Select Cancel Subscription under Subscription details.",
-    "aliases": ["hotstar", "disney", "disney+ hotstar", "disney hotstar"]
+    "cancel_url": "https://www.hotstar.com/in/my-account"
+  },
+  {
+    "name": "Amazon Prime Video",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/primevideo.com",
+    "default_cost": 299,
+    "currency": "INR",
+    "cancel_url": "https://www.amazon.in/mc/manage"
+  },
+  {
+    "name": "YouTube Premium",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/youtube.com",
+    "default_cost": 129,
+    "currency": "INR",
+    "cancel_url": "https://www.youtube.com/paid_memberships"
+  },
+  {
+    "name": "Apple TV+",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/tv.apple.com",
+    "default_cost": 99,
+    "currency": "INR",
+    "cancel_url": "https://support.apple.com/HT207594"
+  },
+  {
+    "name": "Hulu",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/hulu.com",
+    "default_cost": 650,
+    "currency": "INR",
+    "cancel_url": "https://secure.hulu.com/account"
+  },
+  {
+    "name": "Max (HBO)",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/max.com",
+    "default_cost": 820,
+    "currency": "INR",
+    "cancel_url": "https://auth.max.com/subscription"
+  },
+  {
+    "name": "Crunchyroll",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/crunchyroll.com",
+    "default_cost": 99,
+    "currency": "INR",
+    "cancel_url": "https://www.crunchyroll.com/account/membership"
+  },
+  {
+    "name": "MUBI",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/mubi.com",
+    "default_cost": 499,
+    "currency": "INR",
+    "cancel_url": "https://mubi.com/settings"
+  },
+  {
+    "name": "Zee5",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/zee5.com",
+    "default_cost": 149,
+    "currency": "INR",
+    "cancel_url": "https://www.zee5.com/myaccount/subscription"
+  },
+  {
+    "name": "SonyLIV",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/sonyliv.com",
+    "default_cost": 299,
+    "currency": "INR",
+    "cancel_url": "https://www.sonyliv.com/subscription/manage"
+  },
+  {
+    "name": "JioCinema Premium",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/jiocinema.com",
+    "default_cost": 29,
+    "currency": "INR",
+    "cancel_url": "https://www.jiocinema.com/subscription"
+  },
+  {
+    "name": "Peacock",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/peacocktv.com",
+    "default_cost": 499,
+    "currency": "INR",
+    "cancel_url": "https://www.peacocktv.com/account"
+  },
+  {
+    "name": "Paramount+",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/paramountplus.com",
+    "default_cost": 499,
+    "currency": "INR",
+    "cancel_url": "https://www.paramountplus.com/account"
+  },
+  {
+    "name": "Discovery+",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/discoveryplus.in",
+    "default_cost": 199,
+    "currency": "INR",
+    "cancel_url": "https://www.discoveryplus.in/my-account"
+  },
+  {
+    "name": "Lionsgate Play",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/lionsgateplay.com",
+    "default_cost": 149,
+    "currency": "INR",
+    "cancel_url": "https://lionsgateplay.com/account"
+  },
+  {
+    "name": "Sun NXT",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/sunnxt.net",
+    "default_cost": 120,
+    "currency": "INR",
+    "cancel_url": "https://www.sunnxt.net/profile"
+  },
+  {
+    "name": "Aha Video",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/aha.video",
+    "default_cost": 149,
+    "currency": "INR",
+    "cancel_url": "https://www.aha.video/my-account"
+  },
+  {
+    "name": "CuriosityStream",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/curiositystream.com",
+    "default_cost": 250,
+    "currency": "INR",
+    "cancel_url": "https://curiositystream.com/settings"
+  },
+  {
+    "name": "Spotify",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/spotify.com",
+    "default_cost": 119,
+    "currency": "INR",
+    "cancel_url": "https://www.spotify.com/account/subscription/"
+  },
+  {
+    "name": "Apple Music",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/music.apple.com",
+    "default_cost": 99,
+    "currency": "INR",
+    "cancel_url": "https://support.apple.com/HT204939"
+  },
+  {
+    "name": "YouTube Music",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/music.youtube.com",
+    "default_cost": 99,
+    "currency": "INR",
+    "cancel_url": "https://www.youtube.com/paid_memberships"
+  },
+  {
+    "name": "Amazon Music Unlimited",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/amazon.com",
+    "default_cost": 120,
+    "currency": "INR",
+    "cancel_url": "https://www.amazon.in/music/settings"
+  },
+  {
+    "name": "Tidal HiFi",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/tidal.com",
+    "default_cost": 850,
+    "currency": "INR",
+    "cancel_url": "https://my.tidal.com/account"
+  },
+  {
+    "name": "JioSaavn Pro",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/jiosaavn.com",
+    "default_cost": 99,
+    "currency": "INR",
+    "cancel_url": "https://www.jiosaavn.com/pro"
+  },
+  {
+    "name": "Gaana Plus",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/gaana.com",
+    "default_cost": 99,
+    "currency": "INR",
+    "cancel_url": "https://gaana.com/myprofile"
+  },
+  {
+    "name": "Deezer Premium",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/deezer.com",
+    "default_cost": 450,
+    "currency": "INR",
+    "cancel_url": "https://www.deezer.com/account"
+  },
+  {
+    "name": "SoundCloud Go+",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/soundcloud.com",
+    "default_cost": 420,
+    "currency": "INR",
+    "cancel_url": "https://soundcloud.com/settings/subscription"
+  },
+  {
+    "name": "Qobuz",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/qobuz.com",
+    "default_cost": 1050,
+    "currency": "INR",
+    "cancel_url": "https://www.qobuz.com/account"
+  },
+  {
+    "name": "Xbox Game Pass Ultimate",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/xbox.com",
+    "default_cost": 549,
+    "currency": "INR",
+    "cancel_url": "https://account.microsoft.com/services"
+  },
+  {
+    "name": "PlayStation Plus Extra",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/playstation.com",
+    "default_cost": 749,
+    "currency": "INR",
+    "cancel_url": "https://store.playstation.com/subscriptions"
+  },
+  {
+    "name": "Nintendo Switch Online",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/nintendo.com",
+    "default_cost": 350,
+    "currency": "INR",
+    "cancel_url": "https://ec.nintendo.com/membership"
+  },
+  {
+    "name": "EA Play",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/ea.com",
+    "default_cost": 315,
+    "currency": "INR",
+    "cancel_url": "https://myaccount.ea.com/cp-ui/subscription/index"
+  },
+  {
+    "name": "GeForce NOW Priority",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/nvidia.com",
+    "default_cost": 830,
+    "currency": "INR",
+    "cancel_url": "https://www.nvidia.com/account"
+  },
+  {
+    "name": "Ubisoft+",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/ubisoft.com",
+    "default_cost": 1250,
+    "currency": "INR",
+    "cancel_url": "https://store.ubisoft.com/ubisoftplus"
+  },
+  {
+    "name": "Apple Arcade",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/apple.com",
+    "default_cost": 99,
+    "currency": "INR",
+    "cancel_url": "https://support.apple.com/HT207594"
+  },
+  {
+    "name": "Humble Choice",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/humblebundle.com",
+    "default_cost": 990,
+    "currency": "INR",
+    "cancel_url": "https://www.humblebundle.com/user/settings"
+  },
+  {
+    "name": "World of Warcraft",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/blizzard.com",
+    "default_cost": 1250,
+    "currency": "INR",
+    "cancel_url": "https://account.battle.net/games"
+  },
+  {
+    "name": "Microsoft 365 Personal",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/microsoft.com",
+    "default_cost": 489,
+    "currency": "INR",
+    "cancel_url": "https://account.microsoft.com/services"
+  },
+  {
+    "name": "Adobe Creative Cloud",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/adobe.com",
+    "default_cost": 4230,
+    "currency": "INR",
+    "cancel_url": "https://account.adobe.com/plans"
+  },
+  {
+    "name": "Adobe Photography Plan",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/adobe.com",
+    "default_cost": 799,
+    "currency": "INR",
+    "cancel_url": "https://account.adobe.com/plans"
+  },
+  {
+    "name": "Notion Plus",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/notion.so",
+    "default_cost": 660,
+    "currency": "INR",
+    "cancel_url": "https://www.notion.so/settings/billing"
+  },
+  {
+    "name": "Canva Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/canva.com",
+    "default_cost": 499,
+    "currency": "INR",
+    "cancel_url": "https://www.canva.com/settings/billing-and-teams"
+  },
+  {
+    "name": "Figma Professional",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/figma.com",
+    "default_cost": 1000,
+    "currency": "INR",
+    "cancel_url": "https://www.figma.com/settings"
+  },
+  {
+    "name": "JetBrains All Products Pack",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/jetbrains.com",
+    "default_cost": 2400,
+    "currency": "INR",
+    "cancel_url": "https://account.jetbrains.com/licenses"
+  },
+  {
+    "name": "1Password",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/1password.com",
+    "default_cost": 250,
+    "currency": "INR",
+    "cancel_url": "https://my.1password.com/billing"
+  },
+  {
+    "name": "Bitwarden Premium",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/bitwarden.com",
+    "default_cost": 80,
+    "currency": "INR",
+    "cancel_url": "https://vault.bitwarden.com/#/settings/subscription"
+  },
+  {
+    "name": "LastPass Premium",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/lastpass.com",
+    "default_cost": 250,
+    "currency": "INR",
+    "cancel_url": "https://lastpass.com/my-account"
+  },
+  {
+    "name": "Grammarly Premium",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/grammarly.com",
+    "default_cost": 990,
+    "currency": "INR",
+    "cancel_url": "https://account.grammarly.com/subscription"
+  },
+  {
+    "name": "Todoist Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/todoist.com",
+    "default_cost": 330,
+    "currency": "INR",
+    "cancel_url": "https://app.todoist.com/app/settings/subscription"
+  },
+  {
+    "name": "Setapp",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/setapp.com",
+    "default_cost": 820,
+    "currency": "INR",
+    "cancel_url": "https://my.setapp.com/account"
+  },
+  {
+    "name": "CleanMyMac X",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/macpaw.com",
+    "default_cost": 350,
+    "currency": "INR",
+    "cancel_url": "https://my.macpaw.com/"
+  },
+  {
+    "name": "Zoom Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/zoom.us",
+    "default_cost": 1200,
+    "currency": "INR",
+    "cancel_url": "https://zoom.us/billing"
+  },
+  {
+    "name": "Slack Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/slack.com",
+    "default_cost": 600,
+    "currency": "INR",
+    "cancel_url": "https://slack.com/admin/billing"
+  },
+  {
+    "name": "Loom Business",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/loom.com",
+    "default_cost": 1050,
+    "currency": "INR",
+    "cancel_url": "https://www.loom.com/settings/billing"
+  },
+  {
+    "name": "Raycast Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/raycast.com",
+    "default_cost": 660,
+    "currency": "INR",
+    "cancel_url": "https://www.raycast.com/settings"
+  },
+  {
+    "name": "Linear Standard",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/linear.app",
+    "default_cost": 660,
+    "currency": "INR",
+    "cancel_url": "https://linear.app/settings/billing"
+  },
+  {
+    "name": "Webflow Basic",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/webflow.com",
+    "default_cost": 1150,
+    "currency": "INR",
+    "cancel_url": "https://webflow.com/dashboard/account/billing"
+  },
+  {
+    "name": "Framer Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/framer.com",
+    "default_cost": 820,
+    "currency": "INR",
+    "cancel_url": "https://framer.com/settings"
+  },
+  {
+    "name": "Zapier Starter",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/zapier.com",
+    "default_cost": 1650,
+    "currency": "INR",
+    "cancel_url": "https://zapier.com/app/billing"
+  },
+  {
+    "name": "Postman Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/postman.com",
+    "default_cost": 990,
+    "currency": "INR",
+    "cancel_url": "https://go.postman.co/billing"
+  },
+  {
+    "name": "Vercel Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/vercel.com",
+    "default_cost": 1650,
+    "currency": "INR",
+    "cancel_url": "https://vercel.com/dashboard/billing"
+  },
+  {
+    "name": "ChatGPT Plus",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/openai.com",
+    "default_cost": 1650,
+    "currency": "INR",
+    "cancel_url": "https://chatgpt.com/#settings/Subscription"
+  },
+  {
+    "name": "Claude Pro",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/anthropic.com",
+    "default_cost": 1650,
+    "currency": "INR",
+    "cancel_url": "https://claude.ai/settings/billing"
+  },
+  {
+    "name": "Gemini Advanced",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/google.com",
+    "default_cost": 1950,
+    "currency": "INR",
+    "cancel_url": "https://one.google.com/settings"
+  },
+  {
+    "name": "Midjourney Standard",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/midjourney.com",
+    "default_cost": 2500,
+    "currency": "INR",
+    "cancel_url": "https://www.midjourney.com/account"
+  },
+  {
+    "name": "GitHub Copilot",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/github.com",
+    "default_cost": 830,
+    "currency": "INR",
+    "cancel_url": "https://github.com/settings/billing"
+  },
+  {
+    "name": "Cursor Pro",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/cursor.com",
+    "default_cost": 1650,
+    "currency": "INR",
+    "cancel_url": "https://www.cursor.com/settings"
+  },
+  {
+    "name": "Perplexity Pro",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/perplexity.ai",
+    "default_cost": 1650,
+    "currency": "INR",
+    "cancel_url": "https://www.perplexity.ai/settings/account"
+  },
+  {
+    "name": "Jasper AI Creator",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/jasper.ai",
+    "default_cost": 3200,
+    "currency": "INR",
+    "cancel_url": "https://app.jasper.ai/settings/billing"
+  },
+  {
+    "name": "ElevenLabs Starter",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/elevenlabs.io",
+    "default_cost": 420,
+    "currency": "INR",
+    "cancel_url": "https://elevenlabs.io/subscription"
+  },
+  {
+    "name": "Runway ML Standard",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/runwayml.com",
+    "default_cost": 1250,
+    "currency": "INR",
+    "cancel_url": "https://app.runwayml.com/settings"
+  },
+  {
+    "name": "Otter.ai Pro",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/otter.ai",
+    "default_cost": 830,
+    "currency": "INR",
+    "cancel_url": "https://otter.ai/account/billing"
+  },
+  {
+    "name": "Copy.ai Pro",
+    "category": "ai",
+    "logo_url": "https://logo.clearbit.com/copy.ai",
+    "default_cost": 2990,
+    "currency": "INR",
+    "cancel_url": "https://app.copy.ai/settings"
+  },
+  {
+    "name": "Google One (100GB)",
+    "category": "cloud",
+    "logo_url": "https://logo.clearbit.com/google.com",
+    "default_cost": 130,
+    "currency": "INR",
+    "cancel_url": "https://one.google.com/settings"
+  },
+  {
+    "name": "Google One (2TB)",
+    "category": "cloud",
+    "logo_url": "https://logo.clearbit.com/google.com",
+    "default_cost": 650,
+    "currency": "INR",
+    "cancel_url": "https://one.google.com/settings"
+  },
+  {
+    "name": "iCloud+ (50GB)",
+    "category": "cloud",
+    "logo_url": "https://logo.clearbit.com/apple.com",
+    "default_cost": 75,
+    "currency": "INR",
+    "cancel_url": "https://support.apple.com/HT207594"
+  },
+  {
+    "name": "iCloud+ (200GB)",
+    "category": "cloud",
+    "logo_url": "https://logo.clearbit.com/apple.com",
+    "default_cost": 219,
+    "currency": "INR",
+    "cancel_url": "https://support.apple.com/HT207594"
+  },
+  {
+    "name": "Dropbox Plus (2TB)",
+    "category": "cloud",
+    "logo_url": "https://logo.clearbit.com/dropbox.com",
+    "default_cost": 990,
+    "currency": "INR",
+    "cancel_url": "https://www.dropbox.com/account/plan"
+  },
+  {
+    "name": "OneDrive Standalone",
+    "category": "cloud",
+    "logo_url": "https://logo.clearbit.com/microsoft.com",
+    "default_cost": 149,
+    "currency": "INR",
+    "cancel_url": "https://onedrive.live.com/"
+  },
+  {
+    "name": "Backblaze Unlimited",
+    "category": "cloud",
+    "logo_url": "https://logo.clearbit.com/backblaze.com",
+    "default_cost": 750,
+    "currency": "INR",
+    "cancel_url": "https://secure.backblaze.com/billing.htm"
+  },
+  {
+    "name": "Box Personal Pro",
+    "category": "cloud",
+    "logo_url": "https://logo.clearbit.com/box.com",
+    "default_cost": 850,
+    "currency": "INR",
+    "cancel_url": "https://app.box.com/account"
+  },
+  {
+    "name": "Mega Pro I",
+    "category": "cloud",
+    "logo_url": "https://logo.clearbit.com/mega.io",
+    "default_cost": 450,
+    "currency": "INR",
+    "cancel_url": "https://mega.io/account"
+  },
+  {
+    "name": "Peloton App One",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/onepeloton.com",
+    "default_cost": 1050,
+    "currency": "INR",
+    "cancel_url": "https://members.onepeloton.com/preferences/subscriptions"
+  },
+  {
+    "name": "Nike Training Club",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/nike.com",
+    "default_cost": 990,
+    "currency": "INR",
+    "cancel_url": "https://www.nike.com/orders"
+  },
+  {
+    "name": "Strava Subscription",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/strava.com",
+    "default_cost": 299,
+    "currency": "INR",
+    "cancel_url": "https://www.strava.com/settings/billing"
+  },
+  {
+    "name": "MyFitnessPal Premium",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/myfitnesspal.com",
+    "default_cost": 620,
+    "currency": "INR",
+    "cancel_url": "https://www.myfitnesspal.com/account/settings"
+  },
+  {
+    "name": "Headspace Plus",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/headspace.com",
+    "default_cost": 499,
+    "currency": "INR",
+    "cancel_url": "https://www.headspace.com/subscription/manage"
+  },
+  {
+    "name": "Calm Premium",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/calm.com",
+    "default_cost": 550,
+    "currency": "INR",
+    "cancel_url": "https://www.calm.com/profile#subscription"
+  },
+  {
+    "name": "Cultpass ELITE",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/cult.fit",
+    "default_cost": 1499,
+    "currency": "INR",
+    "cancel_url": "https://www.cult.fit/me/orders"
+  },
+  {
+    "name": "WHOOP Membership",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/whoop.com",
+    "default_cost": 2490,
+    "currency": "INR",
+    "cancel_url": "https://app.whoop.com/membership"
+  },
+  {
+    "name": "Apple Fitness+",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/apple.com",
+    "default_cost": 830,
+    "currency": "INR",
+    "cancel_url": "https://support.apple.com/HT207594"
+  },
+  {
+    "name": "Fitbod Elite",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/fitbod.me",
+    "default_cost": 820,
+    "currency": "INR",
+    "cancel_url": "https://app.fitbod.me/account"
+  },
+  {
+    "name": "Freeletics Coach",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/freeletics.com",
+    "default_cost": 990,
+    "currency": "INR",
+    "cancel_url": "https://www.freeletics.com/en/settings"
+  },
+  {
+    "name": "Coursera Plus",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/coursera.org",
+    "default_cost": 3500,
+    "currency": "INR",
+    "cancel_url": "https://www.coursera.org/my-purchases"
+  },
+  {
+    "name": "Udemy Personal Plan",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/udemy.com",
+    "default_cost": 850,
+    "currency": "INR",
+    "cancel_url": "https://www.udemy.com/user/edit-subscription/"
+  },
+  {
+    "name": "Skillshare Member",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/skillshare.com",
+    "default_cost": 1100,
+    "currency": "INR",
+    "cancel_url": "https://www.skillshare.com/settings/payments"
+  },
+  {
+    "name": "LinkedIn Learning",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/linkedin.com",
+    "default_cost": 1610,
+    "currency": "INR",
+    "cancel_url": "https://www.linkedin.com/premium/manage"
+  },
+  {
+    "name": "Duolingo Super",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/duolingo.com",
+    "default_cost": 299,
+    "currency": "INR",
+    "cancel_url": "https://www.duolingo.com/settings/super"
+  },
+  {
+    "name": "Brilliant Premium",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/brilliant.org",
+    "default_cost": 1100,
+    "currency": "INR",
+    "cancel_url": "https://brilliant.org/settings/subscription/"
+  },
+  {
+    "name": "MasterClass Annual",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/masterclass.com",
+    "default_cost": 1200,
+    "currency": "INR",
+    "cancel_url": "https://www.masterclass.com/account/billing"
+  },
+  {
+    "name": "Codecademy Pro",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/codecademy.com",
+    "default_cost": 1450,
+    "currency": "INR",
+    "cancel_url": "https://www.codecademy.com/account/billing"
+  },
+  {
+    "name": "DataCamp Premium",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/datacamp.com",
+    "default_cost": 1150,
+    "currency": "INR",
+    "cancel_url": "https://www.datacamp.com/settings/subscription"
+  },
+  {
+    "name": "Blinkist Premium",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/blinkist.com",
+    "default_cost": 750,
+    "currency": "INR",
+    "cancel_url": "https://www.blinkist.com/en/settings"
+  },
+  {
+    "name": "The New York Times",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/nytimes.com",
+    "default_cost": 400,
+    "currency": "INR",
+    "cancel_url": "https://www.nytimes.com/subscription/cancel"
+  },
+  {
+    "name": "The Wall Street Journal",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/wsj.com",
+    "default_cost": 990,
+    "currency": "INR",
+    "cancel_url": "https://customercenter.wsj.com/"
+  },
+  {
+    "name": "The Athletic",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/theathletic.com",
+    "default_cost": 350,
+    "currency": "INR",
+    "cancel_url": "https://theathletic.com/settings/"
+  },
+  {
+    "name": "Medium Membership",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/medium.com",
+    "default_cost": 420,
+    "currency": "INR",
+    "cancel_url": "https://medium.com/me/settings/membership"
+  },
+  {
+    "name": "The Economist Digital",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/economist.com",
+    "default_cost": 1850,
+    "currency": "INR",
+    "cancel_url": "https://www.economist.com/manage-my-subscription"
+  },
+  {
+    "name": "Substack Subscription",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/substack.com",
+    "default_cost": 500,
+    "currency": "INR",
+    "cancel_url": "https://substack.com/settings"
+  },
+  {
+    "name": "Financial Times",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/ft.com",
+    "default_cost": 2900,
+    "currency": "INR",
+    "cancel_url": "https://www.ft.com/myaccount"
+  },
+  {
+    "name": "Bloomberg Digital",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/bloomberg.com",
+    "default_cost": 2450,
+    "currency": "INR",
+    "cancel_url": "https://www.bloomberg.com/account/subscription"
+  },
+  {
+    "name": "The Ken",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/the-ken.com",
+    "default_cost": 399,
+    "currency": "INR",
+    "cancel_url": "https://the-ken.com/my-account/"
+  },
+  {
+    "name": "The Morning Context",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/themorningcontext.com",
+    "default_cost": 499,
+    "currency": "INR",
+    "cancel_url": "https://themorningcontext.com/profile"
+  },
+  {
+    "name": "Swiggy One",
+    "category": "food",
+    "logo_url": "https://logo.clearbit.com/swiggy.com",
+    "default_cost": 299,
+    "currency": "INR",
+    "cancel_url": "https://www.swiggy.com/my-account"
+  },
+  {
+    "name": "Zomato Gold",
+    "category": "food",
+    "logo_url": "https://logo.clearbit.com/zomato.com",
+    "default_cost": 199,
+    "currency": "INR",
+    "cancel_url": "https://www.zomato.com/gold"
+  },
+  {
+    "name": "DoorDash DashPass",
+    "category": "food",
+    "logo_url": "https://logo.clearbit.com/doordash.com",
+    "default_cost": 820,
+    "currency": "INR",
+    "cancel_url": "https://www.doordash.com/consumer/dashpass/"
+  },
+  {
+    "name": "Uber One",
+    "category": "food",
+    "logo_url": "https://logo.clearbit.com/uber.com",
+    "default_cost": 149,
+    "currency": "INR",
+    "cancel_url": "https://m.uber.com/v/pass"
+  },
+  {
+    "name": "HelloFresh Plan",
+    "category": "food",
+    "logo_url": "https://logo.clearbit.com/hellofresh.com",
+    "default_cost": 4500,
+    "currency": "INR",
+    "cancel_url": "https://www.hellofresh.com/my-account"
+  },
+  {
+    "name": "Instacart+",
+    "category": "food",
+    "logo_url": "https://logo.clearbit.com/instacart.com",
+    "default_cost": 830,
+    "currency": "INR",
+    "cancel_url": "https://www.instacart.com/store/account/express"
+  },
+  {
+    "name": "Deliveroo Plus",
+    "category": "food",
+    "logo_url": "https://logo.clearbit.com/deliveroo.co.uk",
+    "default_cost": 350,
+    "currency": "INR",
+    "cancel_url": "https://deliveroo.co.uk/account"
+  },
+  {
+    "name": "NordVPN",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/nordvpn.com",
+    "default_cost": 350,
+    "currency": "INR",
+    "cancel_url": "https://my.nordaccount.com/billing/my-subscriptions/"
+  },
+  {
+    "name": "ExpressVPN",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/expressvpn.com",
+    "default_cost": 690,
+    "currency": "INR",
+    "cancel_url": "https://www.expressvpn.com/users/sign_in"
+  },
+  {
+    "name": "Surfshark VPN",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/surfshark.com",
+    "default_cost": 250,
+    "currency": "INR",
+    "cancel_url": "https://my.surfshark.com/account/subscription"
+  },
+  {
+    "name": "Proton Unlimited",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/proton.me",
+    "default_cost": 850,
+    "currency": "INR",
+    "cancel_url": "https://account.proton.me/u/0/mail/subscription"
+  },
+  {
+    "name": "Proton Mail Plus",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/proton.me",
+    "default_cost": 350,
+    "currency": "INR",
+    "cancel_url": "https://account.proton.me/u/0/mail/subscription"
+  },
+  {
+    "name": "Mullvad VPN",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/mullvad.net",
+    "default_cost": 450,
+    "currency": "INR",
+    "cancel_url": "https://mullvad.net/account/"
+  },
+  {
+    "name": "CyberGhost VPN",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/cyberghostvpn.com",
+    "default_cost": 220,
+    "currency": "INR",
+    "cancel_url": "https://my.cyberghostvpn.com/en_US/subscriptions"
+  },
+  {
+    "name": "Private Internet Access",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/privateinternetaccess.com",
+    "default_cost": 280,
+    "currency": "INR",
+    "cancel_url": "https://www.privateinternetaccess.com/pages/client-control-panel"
+  },
+  {
+    "name": "TunnelBear Unlimited",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/tunnelbear.com",
+    "default_cost": 280,
+    "currency": "INR",
+    "cancel_url": "https://www.tunnelbear.com/account"
+  },
+  {
+    "name": "Fastmail Standard",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/fastmail.com",
+    "default_cost": 420,
+    "currency": "INR",
+    "cancel_url": "https://www.fastmail.com/settings/billing"
+  },
+  {
+    "name": "DuckDuckGo Privacy Pro",
+    "category": "utilities",
+    "logo_url": "https://logo.clearbit.com/duckduckgo.com",
+    "default_cost": 830,
+    "currency": "INR",
+    "cancel_url": "https://duckduckgo.com/pro"
+  },
+  {
+    "name": "Patreon Supporter",
+    "category": "other",
+    "logo_url": "https://logo.clearbit.com/patreon.com",
+    "default_cost": 450,
+    "currency": "INR",
+    "cancel_url": "https://www.patreon.com/user/settings/memberships"
+  },
+  {
+    "name": "Discord Nitro",
+    "category": "gaming",
+    "logo_url": "https://logo.clearbit.com/discord.com",
+    "default_cost": 450,
+    "currency": "INR",
+    "cancel_url": "https://discord.com/settings/subscriptions"
+  },
+  {
+    "name": "Twitch Sub",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/twitch.tv",
+    "default_cost": 110,
+    "currency": "INR",
+    "cancel_url": "https://www.twitch.tv/subscriptions"
+  },
+  {
+    "name": "Reddit Premium",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/reddit.com",
+    "default_cost": 480,
+    "currency": "INR",
+    "cancel_url": "https://www.reddit.com/settings/premium"
+  },
+  {
+    "name": "X Premium (Twitter)",
+    "category": "news",
+    "logo_url": "https://logo.clearbit.com/x.com",
+    "default_cost": 650,
+    "currency": "INR",
+    "cancel_url": "https://x.com/settings/premium"
+  },
+  {
+    "name": "Letterboxd Pro",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/letterboxd.com",
+    "default_cost": 160,
+    "currency": "INR",
+    "cancel_url": "https://letterboxd.com/settings/subscriptions/"
+  },
+  {
+    "name": "Goodnotes 6 Full",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/goodnotes.com",
+    "default_cost": 850,
+    "currency": "INR",
+    "cancel_url": "https://support.apple.com/HT207594"
+  },
+  {
+    "name": "Craft Docs Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/craft.do",
+    "default_cost": 500,
+    "currency": "INR",
+    "cancel_url": "https://www.craft.do/account"
+  },
+  {
+    "name": "Readwise Reader",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/readwise.io",
+    "default_cost": 660,
+    "currency": "INR",
+    "cancel_url": "https://readwise.io/preferences"
+  },
+  {
+    "name": "Pocket Casts Plus",
+    "category": "music",
+    "logo_url": "https://logo.clearbit.com/pocketcasts.com",
+    "default_cost": 150,
+    "currency": "INR",
+    "cancel_url": "https://pocketcasts.com/profile/"
+  },
+  {
+    "name": "Instapaper Premium",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/instapaper.com",
+    "default_cost": 250,
+    "currency": "INR",
+    "cancel_url": "https://www.instapaper.com/user"
+  },
+  {
+    "name": "Raindrop.io Pro",
+    "category": "software",
+    "logo_url": "https://logo.clearbit.com/raindrop.io",
+    "default_cost": 250,
+    "currency": "INR",
+    "cancel_url": "https://app.raindrop.io/settings/billing"
+  },
+  {
+    "name": "Audible Premium Plus",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/audible.in",
+    "default_cost": 199,
+    "currency": "INR",
+    "cancel_url": "https://www.audible.in/account/overview"
+  },
+  {
+    "name": "Storytel Unlimited",
+    "category": "entertainment",
+    "logo_url": "https://logo.clearbit.com/storytel.com",
+    "default_cost": 299,
+    "currency": "INR",
+    "cancel_url": "https://www.storytel.com/in/en/my-page/manage-subscription"
+  },
+  {
+    "name": "Kobo Plus",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/kobo.com",
+    "default_cost": 450,
+    "currency": "INR",
+    "cancel_url": "https://www.kobo.com/my-account/subscriptions"
+  },
+  {
+    "name": "Kindle Unlimited",
+    "category": "education",
+    "logo_url": "https://logo.clearbit.com/amazon.in",
+    "default_cost": 169,
+    "currency": "INR",
+    "cancel_url": "https://www.amazon.in/ku/central"
+  },
+  {
+    "name": "Strava Summit",
+    "category": "fitness",
+    "logo_url": "https://logo.clearbit.com/strava.com",
+    "default_cost": 499,
+    "currency": "INR",
+    "cancel_url": "https://www.strava.com/settings/billing"
   }
 ]

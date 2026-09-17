@@ -10,7 +10,9 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/dashboard') ||
     pathname.startsWith('/subscriptions') ||
     pathname.startsWith('/calendar') ||
-    pathname.startsWith('/analytics');
+    pathname.startsWith('/analytics') ||
+    pathname.startsWith('/import') ||
+    pathname.startsWith('/settings');
 
   if (isAuthPage && token) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
@@ -34,5 +36,7 @@ export const config = {
     '/subscriptions/:path*',
     '/calendar/:path*',
     '/analytics/:path*',
+    '/import/:path*',
+    '/settings/:path*',
   ],
 };

@@ -70,7 +70,7 @@ class SubscriptionEvent(models.Model):
 
 class KnownService(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, db_index=True)
     category = models.CharField(max_length=50)
     logo_url = models.URLField(null=True, blank=True)
     default_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -82,6 +82,9 @@ class KnownService(models.Model):
 
     class Meta:
         db_table = 'known_services'
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
     def __str__(self):
         return self.name
