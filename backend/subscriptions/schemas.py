@@ -1,0 +1,81 @@
+from pydantic import BaseModel
+from typing import Optional, List
+from uuid import UUID
+from datetime import date, datetime
+from decimal import Decimal
+
+class SubscriptionCreate(BaseModel):
+    name: str
+    amount: Decimal
+    currency: str = 'INR'
+    billing_frequency: str = 'monthly'
+    next_renewal_date: date
+    category: str = 'other'
+    status: str = 'active'
+    is_trial: bool = False
+    trial_end_date: Optional[date] = None
+    payment_method: Optional[str] = None
+    notes: Optional[str] = None
+    tags: Optional[List[str]] = None
+
+class SubscriptionUpdate(BaseModel):
+    name: Optional[str] = None
+    amount: Optional[Decimal] = None
+    currency: Optional[str] = None
+    billing_frequency: Optional[str] = None
+    next_renewal_date: Optional[date] = None
+    category: Optional[str] = None
+    status: Optional[str] = None
+    is_trial: Optional[bool] = None
+    trial_end_date: Optional[date] = None
+    payment_method: Optional[str] = None
+    notes: Optional[str] = None
+    tags: Optional[List[str]] = None
+
+class SubscriptionOut(BaseModel):
+    id: UUID
+    name: str
+    amount: Decimal
+    currency: str
+    billing_frequency: str
+    next_renewal_date: date
+    category: str
+    status: str
+    is_trial: bool
+    trial_end_date: Optional[date] = None
+    payment_method: Optional[str] = None
+    notes: Optional[str] = None
+    tags: List[str] = []
+    needs_review: bool = False
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class UpcomingItem(BaseModel):
+    id: UUID
+    name: str
+    amount: Decimal
+    currency: str
+    next_renewal_date: date
+    category: str
+    days_until: int
+
+class CategorySummary(BaseModel):
+    category: str
+    total_monthly: float
+    count: int
+
+class SummaryResponse(BaseModel):
+    monthly_total: float
+    yearly_projected: float
+    active_count: int
+    categories_count: int
+    upcoming: List[UpcomingItem]
+    by_category: List[CategorySummary]
+    due_this_week: int
+    due_this_month: int
+
+class MessageResponse(BaseModel):
+    message: str

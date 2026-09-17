@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Netflix",
+    "category": "entertainment",
+    "logo_url": "https://assets.nflxext.com/ffe/siteui/common/icons/nficon2016.ico",
+    "default_cost": 649.00,
+    "currency": "INR",
+    "cancel_url": "https://www.netflix.com/cancelplan",
+    "cancel_steps": "1. Go to Account page. 2. Under Membership & Billing, select Cancel Membership. 3. Confirm cancellation.",
+    "aliases": ["netflix", "nflx", "netflix premium", "netflix india"]
+  },
+  {
+    "name": "Spotify",
+    "category": "music",
+    "logo_url": "https://open.spotifycdn.com/cdn/images/favicon32.8e66b099.png",
+    "default_cost": 119.00,
+    "currency": "INR",
+    "cancel_url": "https://www.spotify.com/account/subscription/",
+    "cancel_steps": "1. Log into your Spotify account page. 2. Under Your plan, click Change plan. 3. Scroll to Cancel Spotify and click Cancel Premium.",
+    "aliases": ["spotify", "spotify premium", "spotify music"]
+  },
+  {
+    "name": "YouTube Premium",
+    "category": "entertainment",
+    "logo_url": "https://www.youtube.com/s/desktop/4f801691/img/favicon.ico",
+    "default_cost": 129.00,
+    "currency": "INR",
+    "cancel_url": "https://www.youtube.com/paid_memberships",
+    "cancel_steps": "1. Go to Purchases and Memberships. 2. Click Manage membership next to YouTube Premium. 3. Select Deactivate.",
+    "aliases": ["youtube", "youtube premium", "yt premium", "youtube music"]
+  },
+  {
+    "name": "Amazon Prime",
+    "category": "entertainment",
+    "logo_url": "https://www.amazon.in/favicon.ico",
+    "default_cost": 299.00,
+    "currency": "INR",
+    "cancel_url": "https://www.amazon.in/mc/manage",
+    "cancel_steps": "1. Go to Manage Prime Membership. 2. Select End Membership and Benefits. 3. Confirm cancellation.",
+    "aliases": ["prime", "amazon prime", "prime video", "amazon"]
+  },
+  {
+    "name": "ChatGPT Plus",
+    "category": "ai",
+    "logo_url": "https://chatgpt.com/favicon.ico",
+    "default_cost": 1650.00,
+    "currency": "INR",
+    "cancel_url": "https://chatgpt.com/#settings/Subscription",
+    "cancel_steps": "1. Click profile icon in bottom-left. 2. Select Settings -> Subscription. 3. Click Manage -> Cancel plan.",
+    "aliases": ["chatgpt", "chatgpt plus", "openai", "gpt-4", "gpt4"]
+  },
+  {
+    "name": "Claude Pro",
+    "category": "ai",
+    "logo_url": "https://claude.ai/favicon.ico",
+    "default_cost": 1650.00,
+    "currency": "INR",
+    "cancel_url": "https://claude.ai/settings/billing",
+    "cancel_steps": "1. Open Claude settings. 2. Go to Billing. 3. Click Cancel Subscription.",
+    "aliases": ["claude", "claude pro", "anthropic"]
+  },
+  {
+    "name": "GitHub Copilot",
+    "category": "software",
+    "logo_url": "https://github.githubassets.com/favicons/favicon.png",
+    "default_cost": 830.00,
+    "currency": "INR",
+    "cancel_url": "https://github.com/settings/billing",
+    "cancel_steps": "1. Go to GitHub Settings -> Billing and plans. 2. Find GitHub Copilot and click Edit -> Cancel Copilot.",
+    "aliases": ["copilot", "github copilot", "gh copilot"]
+  },
+  {
+    "name": "Google One",
+    "category": "cloud",
+    "logo_url": "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png",
+    "default_cost": 130.00,
+    "currency": "INR",
+    "cancel_url": "https://one.google.com/settings",
+    "cancel_steps": "1. Go to Google One settings. 2. Click Cancel membership. 3. Follow confirmation prompts.",
+    "aliases": ["google drive", "google one", "gdrive", "google cloud"]
+  },
+  {
+    "name": "iCloud+",
+    "category": "cloud",
+    "logo_url": "https://www.apple.com/favicon.ico",
+    "default_cost": 75.00,
+    "currency": "INR",
+    "cancel_url": "https://support.apple.com/HT207594",
+    "cancel_steps": "1. On Apple device, go to Settings -> Apple ID -> iCloud. 2. Tap Manage Account Storage -> Change Storage Plan -> Downgrade Options.",
+    "aliases": ["icloud", "icloud+", "apple storage"]
+  },
+  {
+    "name": "Disney+ Hotstar",
+    "category": "entertainment",
+    "logo_url": "https://www.hotstar.com/favicon.ico",
+    "default_cost": 299.00,
+    "currency": "INR",
+    "cancel_url": "https://www.hotstar.com/in/my-account",
+    "cancel_steps": "1. Go to My Account. 2. Select Cancel Subscription under Subscription details.",
+    "aliases": ["hotstar", "disney", "disney+ hotstar", "disney hotstar"]
+  }
+]

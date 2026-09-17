@@ -1,0 +1,16 @@
+{
+  "name": "House of Subscriptions",
+  "short_name": "HouseOfSubs",
+  "description": "A free, privacy-first subscription manager — track, analyze, and optimize every recurring payment.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f1a",
+  "theme_color": "#4F46E5",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
