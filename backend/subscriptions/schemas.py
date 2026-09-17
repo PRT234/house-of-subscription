@@ -47,11 +47,30 @@ class SubscriptionOut(BaseModel):
     notes: Optional[str] = None
     tags: List[str] = []
     needs_review: bool = False
+    previous_amount: Optional[Decimal] = None
+    price_increased: bool = False
+    price_delta: Optional[Decimal] = None
     created_at: datetime
     updated_at: datetime
 
     class Config:
         from_attributes = True
+
+class DuplicateSubItem(BaseModel):
+    id: UUID
+    name: str
+    amount: Decimal
+    currency: str
+
+class DuplicateCategoryGroup(BaseModel):
+    category: str
+    category_label: str
+    count: int
+    subscriptions: List[DuplicateSubItem]
+    combined_monthly: float
+
+class SearchRequest(BaseModel):
+    query: str
 
 class UpcomingItem(BaseModel):
     id: UUID

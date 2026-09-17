@@ -166,10 +166,26 @@ Open `http://localhost:3000` in your browser.
 - [x] User preferences configuration (currency, alert thresholds, notifications)
 - [x] Data export to JSON and CSV formats
 
+### Pass 3: Intelligence, Automation & Scheduled Jobs
+- [x] Price-increase detection with ORM Prefetch (`SubscriptionEvent`) avoiding N+1 queries
+- [x] Orange badge indicator (`↑ +₹X/mo`) on subscription cards highlighting price changes
+- [x] Dashboard recent price hike detection alert banner
+- [x] Scheduled daily jobs API endpoint (`POST /api/jobs/run-daily`) secured via HMAC `compare_digest`
+- [x] Automated trial expiration alerts (3 days prior) via Resend API integration
+- [x] Scheduled renewal reminders based on customized user alert thresholds
+- [x] Automated Sunday weekly digest summarizing upcoming renewals, ending trials, and unreviewed services
+- [x] 1st-of-month financial spending reports with month-over-month price changes
+- [x] GitHub Actions workflow (`.github/workflows/daily-jobs.yml`) for serverless daily cron execution
+- [x] Needs-review stale subscription detection (90+ days without review) with interactive `🔍 Review?` action
+- [x] Duplicate & redundancy detection across Cloud, Entertainment, AI, Software, and Music categories
+- [x] Dismissible dashboard duplicate banners with `localStorage` state persistence
+- [x] Natural-language subscription search powered by Gemini (`POST /api/subscriptions/search`)
+- [x] Subscriptions page AI search bar with debounced input, ✨ indicator, and instant catalog restoration
+
 ### Future Roadmap
-- [ ] Automated email reminders via Resend API
 - [ ] Cancellation assistant with one-click direct automation
 - [ ] Multi-currency conversion via real-time exchange rates
+
 
 ---
 

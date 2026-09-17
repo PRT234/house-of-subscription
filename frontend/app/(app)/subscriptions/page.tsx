@@ -75,6 +75,7 @@ export default function SubscriptionsPage() {
         onEdit={handleEdit}
         onDelete={handleDelete}
         onAddNew={handleAddNew}
+        onRefresh={fetchSubscriptions}
       />
 
       <SubscriptionForm

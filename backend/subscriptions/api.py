@@ -1,3 +1,4 @@
+import json
 import uuid
 from datetime import timedelta, date
 from decimal import Decimal
@@ -5,10 +6,14 @@ from typing import List, Optional
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.core.cache import cache
+from django.db.models import Prefetch
+from django.conf import settings
+from cryptography.fernet import Fernet
+import google.generativeai as genai
 from ninja import Router
 
 from accounts.authentication import JWTAuth
-from subscriptions.models import Subscription, SubscriptionEvent, KnownService
+from subscriptions.models import Subscription, SubscriptionEvent, KnownService, UserSettings
 from subscriptions.schemas import (
     SubscriptionCreate,
     SubscriptionUpdate,
@@ -17,6 +22,9 @@ from subscriptions.schemas import (
     UpcomingItem,
     CategorySummary,
     MessageResponse,
+    DuplicateCategoryGroup,
+    DuplicateSubItem,
+    SearchRequest,
 )
 from subscriptions.services import monthly_cost, annual_cost
 
@@ -25,6 +33,31 @@ router = Router(tags=['Subscriptions'], auth=JWTAuth())
 def _to_subscription_out(sub: Subscription) -> SubscriptionOut:
     ninety_days_ago = timezone.now() - timedelta(days=90)
     needs_rev = (sub.status == 'active') and (sub.updated_at < ninety_days_ago)
+
+    previous_amount = None
+    price_increased = False
+    price_delta = None
+
+    if hasattr(sub, 'price_events'):
+        pe = sub.price_events[0] if sub.price_events else None
+    else:
+        pe = sub.events.filter(event_type='price_changed').order_by('-created_at').first()
+
+    if pe and pe.old_value:
+        val = pe.old_value.get('amount') if isinstance(pe.old_value, dict) else pe.old_value
+        if val is not None:
+            try:
+                prev_amt = Decimal(str(val))
+                if sub.amount > prev_amt:
+                    price_increased = True
+                    price_delta = sub.amount - prev_amt
+                    previous_amount = prev_amt
+                elif sub.amount < prev_amt:
+                    previous_amount = prev_amt
+                    price_delta = sub.amount - prev_amt
+            except Exception:
+                pass
+
     return SubscriptionOut(
         id=sub.id,
         name=sub.name,
@@ -40,6 +73,9 @@ def _to_subscription_out(sub: Subscription) -> SubscriptionOut:
         notes=sub.notes,
         tags=sub.tags or [],
         needs_review=needs_rev,
+        previous_amount=previous_amount,
+        price_increased=price_increased,
+        price_delta=price_delta,
         created_at=sub.created_at,
         updated_at=sub.updated_at,
     )
@@ -51,7 +87,13 @@ def list_subscriptions(
     category: Optional[str] = None,
     search: Optional[str] = None,
 ):
-    qs = Subscription.objects.filter(user=request.auth)
+    price_events_qs = SubscriptionEvent.objects.filter(
+        event_type='price_changed'
+    ).order_by('-created_at')
+
+    qs = Subscription.objects.filter(user=request.auth).prefetch_related(
+        Prefetch('events', queryset=price_events_qs, to_attr='price_events')
+    )
     if status:
         qs = qs.filter(status=status)
     if category:
@@ -193,6 +235,149 @@ def list_known_services(request):
         for s in services
     ]
 
+@router.get('/duplicates', response=List[DuplicateCategoryGroup])
+def get_duplicates(request):
+    """Detect potential duplicate or redundant subscriptions in common categories."""
+    target_categories = ['cloud', 'entertainment', 'ai', 'software', 'music']
+    active_subs = Subscription.objects.filter(
+        user=request.auth,
+        status='active',
+        category__in=target_categories
+    ).order_by('category', 'name')
+
+    CATEGORY_LABELS = {
+        'cloud': 'Cloud',
+        'entertainment': 'Entertainment',
+        'ai': 'AI / ML',
+        'software': 'Software',
+        'music': 'Music',
+    }
+
+    grouped = {}
+    for sub in active_subs:
+        grouped.setdefault(sub.category, []).append(sub)
+
+    results = []
+    for cat, subs in grouped.items():
+        if len(subs) >= 2:
+            combined = sum(monthly_cost(float(s.amount), s.billing_frequency) for s in subs)
+            results.append(
+                DuplicateCategoryGroup(
+                    category=cat,
+                    category_label=CATEGORY_LABELS.get(cat, cat.title()),
+                    count=len(subs),
+                    subscriptions=[
+                        DuplicateSubItem(
+                            id=s.id,
+                            name=s.name,
+                            amount=s.amount,
+                            currency=s.currency,
+                        )
+                        for s in subs
+                    ],
+                    combined_monthly=round(combined, 2),
+                )
+            )
+
+    return results
+
+@router.post('/search', response=List[SubscriptionOut])
+def search_subscriptions(request, data: SearchRequest):
+    """Natural-language subscription search powered by Gemini with intelligent fallback."""
+    query = (data.query or '').strip()
+    price_events_qs = SubscriptionEvent.objects.filter(
+        event_type='price_changed'
+    ).order_by('-created_at')
+
+    all_subs = list(Subscription.objects.filter(user=request.auth).prefetch_related(
+        Prefetch('events', queryset=price_events_qs, to_attr='price_events')
+    ))
+
+    if not all_subs:
+        return []
+
+    if not query:
+        return [_to_subscription_out(s) for s in all_subs]
+
+    # Resolve Gemini API key (BYOK or platform key)
+    user_settings, _ = UserSettings.objects.get_or_create(user=request.auth)
+    api_key = None
+    if user_settings.gemini_api_key_encrypted:
+        try:
+            fernet_key = settings.ENCRYPTION_KEY
+            if isinstance(fernet_key, str):
+                fernet_key = fernet_key.encode()
+            f = Fernet(fernet_key)
+            api_key = f.decrypt(user_settings.gemini_api_key_encrypted.encode()).decode()
+        except Exception:
+            api_key = None
+    if not api_key:
+        api_key = getattr(settings, 'GEMINI_API_KEY', '')
+
+    matched_ids = set()
+    used_gemini = False
+
+    if api_key:
+        subs_context = [
+            {
+                "id": str(s.id),
+                "name": s.name,
+                "category": s.category,
+                "amount": float(s.amount),
+                "currency": s.currency,
+                "billing_frequency": s.billing_frequency,
+                "status": s.status,
+            }
+            for s in all_subs
+        ]
+        prompt = (
+            f"Given these subscriptions: {json.dumps(subs_context)}.\n"
+            f"The user searched: '{query}'.\n"
+            "Return ONLY a JSON array of matching subscription IDs. Example: [\"uuid1\", \"uuid2\"]\n"
+            "Return an empty array [] if no subscriptions match the search intent."
+        )
+        try:
+            genai.configure(api_key=api_key)
+            try:
+                model = genai.GenerativeModel('gemini-2.0-flash')
+                response = model.generate_content(prompt)
+            except Exception:
+                model = genai.GenerativeModel('gemini-1.5-flash')
+                response = model.generate_content(prompt)
+
+            raw_output = (response.text or '').strip()
+            if raw_output.startswith("```"):
+                lines = raw_output.splitlines()
+                if lines and lines[0].startswith("```"):
+                    lines = lines[1:]
+                if lines and lines[-1].startswith("```"):
+                    lines = lines[:-1]
+                raw_output = "\n".join(lines).strip()
+
+            parsed = json.loads(raw_output)
+            if isinstance(parsed, list):
+                matched_ids = {str(item) for item in parsed}
+                used_gemini = True
+        except Exception as e:
+            print(f"[SEARCH GEMINI ERROR]: {e}")
+            used_gemini = False
+
+    # Fallback to smart keyword filtering if Gemini was not available or returned no results
+    if not used_gemini:
+        q_lower = query.lower()
+        for s in all_subs:
+            tags_str = " ".join(s.tags or []).lower()
+            combined_text = f"{s.name} {s.category} {s.status} {s.billing_frequency} {s.notes or ''} {tags_str}".lower()
+            if q_lower in combined_text:
+                matched_ids.add(str(s.id))
+            else:
+                terms = q_lower.split()
+                if terms and all(term in combined_text for term in terms):
+                    matched_ids.add(str(s.id))
+
+    matched_subs = [s for s in all_subs if str(s.id) in matched_ids]
+    return [_to_subscription_out(s) for s in matched_subs]
+
 @router.get('/{sub_id}', response=SubscriptionOut)
 def get_subscription(request, sub_id: uuid.UUID):
     sub = get_object_or_404(Subscription, id=sub_id, user=request.auth)
@@ -272,3 +457,12 @@ def delete_subscription(request, sub_id: uuid.UUID):
 
     cache.delete(f"summary_{request.auth.id}")
     return {'message': 'Subscription cancelled'}
+
+@router.post('/{sub_id}/review', response=SubscriptionOut)
+def mark_reviewed(request, sub_id: uuid.UUID):
+    """Mark a subscription as reviewed, refreshing its updated_at timestamp."""
+    sub = get_object_or_404(Subscription, id=sub_id, user=request.auth)
+    sub.updated_at = timezone.now()
+    sub.save(update_fields=['updated_at'])
+    return _to_subscription_out(sub)
+
