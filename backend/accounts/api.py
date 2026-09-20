@@ -80,3 +80,11 @@ def google_auth(request, data: GoogleAuthRequest):
 @router.get('/me', response=UserOut, auth=JWTAuth())
 def me(request):
     return request.auth
+
+@router.delete('/delete-account', response={200: dict, 401: dict}, auth=JWTAuth())
+def delete_account(request):
+    user = request.auth
+    if user:
+        user.delete() # This cascades to everything linked to the user!
+        return 200, {'deleted': True}
+    return 401, {'detail': 'Invalid user'}

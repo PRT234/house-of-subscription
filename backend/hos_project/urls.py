@@ -9,6 +9,9 @@ from subscriptions.import_api import router as import_router
 from subscriptions.settings_api import router as settings_router
 from subscriptions.jobs_api import router as jobs_router
 from subscriptions.notifications_api import router as notifications_router
+from subscriptions.config_api import router as config_router
+from subscriptions.email_api import router as email_router
+from subscriptions.plaid_api import router as plaid_router
 
 api = NinjaAPI(
     title='House of Subscriptions API',
@@ -23,6 +26,9 @@ api.add_router('/import/', import_router)
 api.add_router('/settings/', settings_router)
 api.add_router('/jobs/', jobs_router)
 api.add_router('/notifications/', notifications_router)
+api.add_router('/config/', config_router)
+api.add_router('/email/', email_router)
+api.add_router('/plaid/', plaid_router)
 
 @api.get('/health')
 def health(request):

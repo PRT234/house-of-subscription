@@ -34,6 +34,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
 ROOT_URLCONF = 'hos_project.urls'
 
 TEMPLATES = [
@@ -121,10 +124,20 @@ JWT_EXPIRY_HOURS = 24
 # Google OAuth
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', '')
+GOOGLE_GMAIL_REDIRECT_URI = os.getenv('GOOGLE_GMAIL_REDIRECT_URI', 'http://localhost:3000/settings/privacy')
+
+# Plaid Integration
+PLAID_CLIENT_ID = os.getenv('PLAID_CLIENT_ID', '')
+PLAID_SECRET = os.getenv('PLAID_SECRET', '')
+PLAID_ENV = os.getenv('PLAID_ENV', 'sandbox')
+
+# Feature Flags
+FEATURE_EMAIL_SCAN = os.getenv('FEATURE_EMAIL_SCAN', 'false').lower() == 'true'
+FEATURE_BANK_LINK = os.getenv('FEATURE_BANK_LINK', 'false').lower() == 'true'
 
 # Gemini & Encryption
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
-ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY') or 'g_kYoONNJJtZ76OpSmQP6hGAjQ-ao1IqeukVYonDfeA='
+ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
 
 # Resend (for later passes)
 RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')

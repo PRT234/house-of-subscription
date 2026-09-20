@@ -20,7 +20,9 @@ import {
   Bell,
   BellRing,
   BellOff,
+  Shield,
 } from 'lucide-react';
+import Link from 'next/link';
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -289,13 +291,21 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-8 max-w-4xl">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-          Settings & Preferences
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
-          Customize currency displays, alert thresholds, encryption keys, and export your data.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            Settings & Preferences
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+            Customize currency displays, alert thresholds, encryption keys, and export your data.
+          </p>
+        </div>
+        <Link href="/settings/privacy">
+          <Button variant="secondary" size="md" className="gap-2">
+            <Shield className="w-4 h-4" />
+            Privacy & Data
+          </Button>
+        </Link>
       </div>
 
       {/* SECTION 1: PROFILE */}

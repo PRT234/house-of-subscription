@@ -119,3 +119,30 @@ def import_statement(request, file: UploadedFile = File(...)):
 
     except Exception as e:
         return 500, {'detail': f"AI extraction failed: {str(e)}"}
+
+@router.get('/export-csv')
+def export_csv(request):
+    import csv
+    from django.http import HttpResponse
+    from subscriptions.models import Subscription
+    
+    subs = Subscription.objects.filter(user=request.auth).order_by('name')
+    
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="subscriptions.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Name', 'Amount', 'Currency', 'Billing Frequency', 'Next Renewal Date', 'Category', 'Status'])
+    
+    for sub in subs:
+        writer.writerow([
+            sub.name,
+            sub.amount,
+            sub.currency,
+            sub.billing_frequency,
+            sub.next_renewal_date,
+            sub.category,
+            sub.status
+        ])
+        
+    return response

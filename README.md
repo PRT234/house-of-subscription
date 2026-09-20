@@ -200,9 +200,17 @@ Open `http://localhost:3000` in your browser.
 - [x] Service worker push (`push`) and notification click (`notificationclick`) listeners in `public/sw.js`
 - [x] Settings page native browser push notifications management card with real-time permissions check
 
+### Pass 5: Gated Features & Privacy System
+- [x] Feature flags integration (`FEATURE_EMAIL_SCAN`, `FEATURE_BANK_LINK`) configurable via environment variables
+- [x] Gated API endpoints exposing functionality strictly when flags are active (`/api/config/features`)
+- [x] Privacy & Data settings page (`/settings/privacy`) orchestrating external connections and feature toggles
+- [x] Complete cascading account deletion system (`DELETE /api/auth/delete-account`) wiping all user traces
+
 ### Future Roadmap
 - [ ] Cancellation assistant with one-click direct automation
 - [ ] Multi-currency conversion via real-time exchange rates
+- [ ] Real Gmail inbox scanning and receipt parsing with Gemini 2.0 (`POST /api/email/scan/{account_id}`)
+- [ ] Real Plaid transaction fetching and extraction pipeline (`POST /api/plaid/transactions`)
 
 ---
 
