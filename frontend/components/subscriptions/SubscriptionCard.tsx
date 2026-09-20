@@ -6,6 +6,13 @@ import { formatCurrency } from '@/lib/utils/formatCurrency';
 import { formatDate, relativeDate, daysUntil, monthlyCost } from '@/lib/utils/dateHelpers';
 import { getCategoryMeta, getStatusMeta } from '@/lib/constants';
 
+export interface SubscriptionShare {
+  id?: string;
+  shared_with_name: string;
+  share_amount: number | string;
+  created_at?: string;
+}
+
 export interface Subscription {
   id: string;
   name: string;
@@ -24,7 +31,10 @@ export interface Subscription {
   previous_amount?: number | string | null;
   price_increased?: boolean;
   price_delta?: number | string | null;
+  shares?: SubscriptionShare[];
+  your_share?: number | string | null;
 }
+
 
 interface SubscriptionCardProps {
   subscription: Subscription;
@@ -105,6 +115,11 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
                 Trial
               </span>
             )}
+            {subscription.shares && subscription.shares.length > 0 && (
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center gap-1 shadow-sm">
+                👥 Split ({subscription.shares.length})
+              </span>
+            )}
             {subscription.needs_review && (
               <button
                 onClick={(e) => {
@@ -121,7 +136,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
           </div>
         </div>
 
-        {/* Pricing row with Price Increase Badge */}
+        {/* Pricing row with Price Increase & Split Badges */}
         <div className="my-3 pt-2 border-t border-white/5 flex items-baseline justify-between flex-wrap gap-2">
           <div>
             <div className="flex items-baseline gap-1.5">
@@ -133,9 +148,20 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
               </span>
             </div>
             {prevNum !== null && subscription.price_increased && (
-              <span className="text-[10px] text-slate-500">
+              <span className="text-[10px] text-slate-500 block">
                 Was {formatCurrency(prevNum, subscription.currency)}
               </span>
+            )}
+            {subscription.shares && subscription.shares.length > 0 && subscription.your_share !== undefined && subscription.your_share !== null && (
+              <div className="mt-1 flex items-baseline gap-1 text-xs text-indigo-300 font-medium">
+                <span>Your share:</span>
+                <span className="text-white font-bold text-sm">
+                  {formatCurrency(Number(subscription.your_share), subscription.currency)}
+                </span>
+                <span className="text-[10px] text-slate-400">
+                  /{subscription.billing_frequency}
+                </span>
+              </div>
             )}
           </div>
 
@@ -152,6 +178,7 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
             )}
           </div>
         </div>
+
 
         {/* Next Renewal Date */}
         <div className="flex items-center gap-2 text-xs text-slate-300 bg-white/[0.03] px-3 py-2 rounded-xl border border-white/5 my-2">
@@ -192,6 +219,23 @@ export const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
             ))}
           </div>
         )}
+
+        {/* Split participants breakdown */}
+        {subscription.shares && subscription.shares.length > 0 && (
+          <div className="mt-2 text-[11px] text-slate-300 bg-indigo-500/10 p-2 rounded-xl border border-indigo-500/20">
+            <div className="text-[10px] text-indigo-300 font-semibold uppercase tracking-wider mb-1">
+              Split with:
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {subscription.shares.map((sh, idx) => (
+                <span key={sh.id || idx} className="bg-white/5 px-2 py-0.5 rounded-md border border-white/5 text-[10px] text-slate-200">
+                  {sh.shared_with_name}: {formatCurrency(Number(sh.share_amount), subscription.currency)}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
 
         {/* Review alert banner if updated > 90 days ago */}
         {subscription.needs_review && (

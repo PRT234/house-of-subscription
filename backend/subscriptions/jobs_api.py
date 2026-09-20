@@ -8,6 +8,7 @@ from ninja import Router
 from accounts.models import User
 from subscriptions.models import Subscription, SubscriptionEvent, UserSettings, KnownService
 from subscriptions.services import send_resend_email, monthly_cost
+from subscriptions.push_service import send_push_notification
 
 router = Router(tags=['Jobs'])
 
@@ -53,7 +54,7 @@ def run_daily_jobs(request):
     tasks_summary.append(f"check_trial_reminders: {trials_notified} notified")
 
     # -------------------------------------------------------------
-    # Task 2: Check Renewal Reminders (User-configured days)
+    # Task 2: Check Renewal Reminders (User-configured days + 24h Web Push)
     # -------------------------------------------------------------
     renewals_notified = 0
     # Group by reminder threshold
@@ -82,6 +83,26 @@ def run_daily_jobs(request):
                 renewals_notified += 1
 
     tasks_summary.append(f"check_renewal_reminders: {renewals_notified} notified")
+
+    # 24h Renewal Web Push Notifications
+    target_tomorrow = today + timedelta(days=1)
+    tomorrow_renewals = Subscription.objects.filter(
+        status='active',
+        next_renewal_date=target_tomorrow
+    ).select_related('user')
+
+    push_sent = 0
+    for sub in tomorrow_renewals:
+        delivered = send_push_notification(
+            user_id=sub.user_id,
+            title=f"🔔 {sub.name} renews tomorrow",
+            body=f"Scheduled payment of {sub.currency} {sub.amount} on {sub.next_renewal_date}.",
+            url="/subscriptions"
+        )
+        push_sent += delivered
+
+    tasks_summary.append(f"push_renewal_notifications: {push_sent} delivered (within 24h)")
+
 
     # -------------------------------------------------------------
     # Task 3: Send Weekly Digest (If Sunday)

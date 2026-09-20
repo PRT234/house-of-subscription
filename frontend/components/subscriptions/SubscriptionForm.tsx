@@ -9,7 +9,12 @@ import { CATEGORIES, BILLING_CYCLES, STATUS_OPTIONS, getCategoryMeta } from '@/l
 import { Subscription } from './SubscriptionCard';
 import { api } from '@/lib/api';
 import { formatCurrency } from '@/lib/utils/formatCurrency';
-import { Sparkles, Calendar, DollarSign, Search, Loader2 } from 'lucide-react';
+import { Sparkles, Calendar, DollarSign, Search, Loader2, Users, Plus, Trash2 } from 'lucide-react';
+
+interface ShareRow {
+  shared_with_name: string;
+  share_amount: string | number;
+}
 
 interface SubscriptionFormProps {
   isOpen: boolean;
@@ -59,6 +64,7 @@ export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
   const [paymentMethod, setPaymentMethod] = useState('');
   const [notes, setNotes] = useState('');
   const [tagsInput, setTagsInput] = useState('');
+  const [shares, setShares] = useState<ShareRow[]>([]);
 
   // Autocomplete state
   const [searchResults, setSearchResults] = useState<ServiceSearchResult[]>([]);
@@ -84,6 +90,14 @@ export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
       setPaymentMethod(initialData.payment_method || '');
       setNotes(initialData.notes || '');
       setTagsInput(initialData.tags ? initialData.tags.join(', ') : '');
+      setShares(
+        initialData.shares
+          ? initialData.shares.map((s) => ({
+              shared_with_name: s.shared_with_name,
+              share_amount: String(s.share_amount),
+            }))
+          : []
+      );
     } else {
       const nextMonth = new Date();
       nextMonth.setMonth(nextMonth.getMonth() + 1);
@@ -101,6 +115,7 @@ export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
       setPaymentMethod('');
       setNotes('');
       setTagsInput('');
+      setShares([]);
     }
     setError(null);
     setSearchResults([]);
@@ -184,10 +199,31 @@ export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
       return;
     }
 
+    const numAmount = parsedAmount;
+    const sumShares = shares.reduce(
+      (acc, s) => acc + (parseFloat(String(s.share_amount)) || 0),
+      0
+    );
+    if (sumShares > numAmount && numAmount > 0) {
+      setError(
+        `Total split amounts (${formatCurrency(sumShares, currency)}) cannot exceed subscription amount (${formatCurrency(numAmount, currency)}).`
+      );
+      return;
+    }
+
     const tags = tagsInput
       .split(',')
       .map((t) => t.trim())
       .filter(Boolean);
+
+    const formattedShares = shares
+      .filter(
+        (s) => s.shared_with_name.trim() && (parseFloat(String(s.share_amount)) || 0) > 0
+      )
+      .map((s) => ({
+        shared_with_name: s.shared_with_name.trim(),
+        share_amount: parseFloat(String(s.share_amount)),
+      }));
 
     const payload = {
       name: name.trim(),
@@ -202,6 +238,7 @@ export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
       payment_method: paymentMethod.trim() || null,
       notes: notes.trim() || null,
       tags,
+      shares: formattedShares,
     };
 
     setIsLoading(true);
@@ -427,6 +464,116 @@ export const SubscriptionForm: React.FC<SubscriptionFormProps> = ({
             />
           )}
         </div>
+
+        {/* Split with Section */}
+        <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xs">
+                <Users className="w-3.5 h-3.5" />
+              </div>
+              <div>
+                <span className="text-xs font-semibold text-white block">
+                  Split with Friends / Family
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  Track who owes what for this service
+                </span>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() =>
+                setShares([...shares, { shared_with_name: '', share_amount: '' }])
+              }
+              className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-400 hover:text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 px-2.5 py-1 rounded-lg border border-indigo-500/20 transition-colors"
+            >
+              <Plus className="w-3 h-3" />
+              <span>Add Person</span>
+            </button>
+          </div>
+
+          {shares.length > 0 && (
+            <div className="space-y-2.5 pt-2 border-t border-white/5">
+              {shares.map((sh, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="Person name (e.g. Alice)"
+                    value={sh.shared_with_name}
+                    onChange={(e) => {
+                      const next = [...shares];
+                      next[idx].shared_with_name = e.target.value;
+                      setShares(next);
+                    }}
+                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500/50 transition-colors"
+                    required
+                  />
+                  <div className="relative w-28">
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-400">
+                      ₹
+                    </span>
+                    <input
+                      type="number"
+                      step="any"
+                      min="0"
+                      placeholder="0.00"
+                      value={sh.share_amount}
+                      onChange={(e) => {
+                        const next = [...shares];
+                        next[idx].share_amount = e.target.value;
+                        setShares(next);
+                      }}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl pl-6 pr-2.5 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500/50 text-right font-medium transition-colors"
+                      required
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShares(shares.filter((_, i) => i !== idx))}
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                    title="Remove person"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+
+              {/* Running "Your Share" Display */}
+              {(() => {
+                const totalNum = parseFloat(amount) || 0;
+                const totalShared = shares.reduce(
+                  (sum, s) => sum + (parseFloat(String(s.share_amount)) || 0),
+                  0
+                );
+                const yourPortion = Math.max(0, totalNum - totalShared);
+                const isOver = totalShared > totalNum && totalNum > 0;
+
+                return (
+                  <div
+                    className={`p-3 rounded-xl border flex items-center justify-between text-xs transition-colors ${
+                      isOver
+                        ? 'bg-rose-500/10 border-rose-500/25 text-rose-300'
+                        : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-200'
+                    }`}
+                  >
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white">Your Net Share</span>
+                      <span className="text-[10px] text-slate-400">
+                        Total {formatCurrency(totalNum, currency)} &minus; Split{' '}
+                        {formatCurrency(totalShared, currency)}
+                      </span>
+                    </div>
+                    <span className="text-base font-black text-white">
+                      {formatCurrency(yourPortion, currency)}
+                    </span>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+        </div>
+
 
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/5">
           <Button type="button" variant="ghost" onClick={onClose}>

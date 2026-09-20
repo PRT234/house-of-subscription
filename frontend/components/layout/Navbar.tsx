@@ -16,11 +16,13 @@ import {
   Menu,
   X,
   Sparkles,
+  BookmarkCheck,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/subscriptions', label: 'Subscriptions', icon: CreditCard },
+  { href: '/considering', label: 'Wishlist', icon: BookmarkCheck },
   { href: '/calendar', label: 'Calendar', icon: CalendarIcon },
   { href: '/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/import', label: 'Import', icon: UploadCloud },

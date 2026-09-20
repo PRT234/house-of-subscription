@@ -182,10 +182,27 @@ Open `http://localhost:3000` in your browser.
 - [x] Natural-language subscription search powered by Gemini (`POST /api/subscriptions/search`)
 - [x] Subscriptions page AI search bar with debounced input, ✨ indicator, and instant catalog restoration
 
+### Pass 4: Collaboration, Wishlist & Web Push Notifications
+- [x] Subscription splitting model (`SubscriptionShare`) with CASCADE relationships
+- [x] Computed net share calculation (`your_share = max(0, amount - sum(shares))`) with N+1 prefetch optimization
+- [x] Subscription form dynamic split participants builder with live running net share and over-split validation
+- [x] Subscription card `"👥 Split ({count})"` badge, `"Your share: ₹X"` price display, and breakdown chips
+- [x] Dashboard and summary metrics aggregation based on user's net share rather than gross amounts
+- [x] Discrete share management endpoints (`POST`, `GET`, `DELETE` at `/api/subscriptions/{id}/shares`)
+- [x] Dedicated Considering / Wishlist page (`/app/(app)/considering/page.tsx`) with status filtering
+- [x] Prospective cashflow impact banner (`"If added: +₹X/month"`, `"+₹Y/year"`)
+- [x] One-click "Add to Subscriptions" activation with automated renewal cycle scheduling
+- [x] Wishlist navigation integration across desktop and mobile Navbar
+- [x] Web Push notifications system via `pywebpush` with RFC 8291 / 8292 standard compliance
+- [x] VAPID keys generation, storage, and public key endpoint (`GET /api/notifications/vapid-public-key`)
+- [x] Browser push subscription registration and pruning endpoints (`/api/notifications/subscribe`, `/unsubscribe`)
+- [x] Automated 24h renewal push alert dispatch integrated into daily scheduled cron jobs
+- [x] Service worker push (`push`) and notification click (`notificationclick`) listeners in `public/sw.js`
+- [x] Settings page native browser push notifications management card with real-time permissions check
+
 ### Future Roadmap
 - [ ] Cancellation assistant with one-click direct automation
 - [ ] Multi-currency conversion via real-time exchange rates
-
 
 ---
 

@@ -1,5 +1,5 @@
-// Basic service worker for House of Subscriptions PWA
-const CACHE_NAME = 'hos-cache-v1';
+// Service worker for House of Subscriptions PWA & Web Push Notifications
+const CACHE_NAME = 'hos-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/manifest.json',
@@ -39,6 +39,61 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request).catch(() => {
       return caches.match(event.request);
+    })
+  );
+});
+
+// Web Push Notification Event Handler
+self.addEventListener('push', (event) => {
+  let data = {
+    title: 'House of Subscriptions',
+    body: 'You have an upcoming subscription renewal.',
+    url: '/dashboard',
+  };
+
+  if (event.data) {
+    try {
+      data = event.data.json();
+    } catch (err) {
+      data.body = event.data.text();
+    }
+  }
+
+  const title = data.title || 'House of Subscriptions';
+  const options = {
+    body: data.body || 'Subscription alert',
+    icon: '/favicon.ico',
+    badge: '/favicon.ico',
+    tag: data.tag || 'hos-renewal-reminder',
+    data: {
+      url: data.url || '/dashboard',
+    },
+    vibrate: [100, 50, 100],
+    actions: [
+      { action: 'open', title: 'Open Dashboard' },
+    ],
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
+});
+
+// Notification Click Event Handler
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = event.notification.data?.url || '/dashboard';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes(targetUrl) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(targetUrl);
+      }
     })
   );
 });

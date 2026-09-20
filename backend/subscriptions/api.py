@@ -13,7 +13,7 @@ import google.generativeai as genai
 from ninja import Router
 
 from accounts.authentication import JWTAuth
-from subscriptions.models import Subscription, SubscriptionEvent, KnownService, UserSettings
+from subscriptions.models import Subscription, SubscriptionEvent, KnownService, UserSettings, SubscriptionShare
 from subscriptions.schemas import (
     SubscriptionCreate,
     SubscriptionUpdate,
@@ -25,6 +25,8 @@ from subscriptions.schemas import (
     DuplicateCategoryGroup,
     DuplicateSubItem,
     SearchRequest,
+    SubscriptionShareIn,
+    SubscriptionShareOut,
 )
 from subscriptions.services import monthly_cost, annual_cost
 
@@ -58,6 +60,10 @@ def _to_subscription_out(sub: Subscription) -> SubscriptionOut:
             except Exception:
                 pass
 
+    shares_list = list(sub.shares.all()) if hasattr(sub, 'shares') else []
+    shares_sum = sum((sh.share_amount for sh in shares_list), Decimal('0'))
+    your_share = max(Decimal('0'), sub.amount - shares_sum)
+
     return SubscriptionOut(
         id=sub.id,
         name=sub.name,
@@ -76,6 +82,16 @@ def _to_subscription_out(sub: Subscription) -> SubscriptionOut:
         previous_amount=previous_amount,
         price_increased=price_increased,
         price_delta=price_delta,
+        shares=[
+            SubscriptionShareOut(
+                id=sh.id,
+                shared_with_name=sh.shared_with_name,
+                share_amount=sh.share_amount,
+                created_at=sh.created_at,
+            )
+            for sh in shares_list
+        ],
+        your_share=your_share,
         created_at=sub.created_at,
         updated_at=sub.updated_at,
     )
@@ -92,7 +108,8 @@ def list_subscriptions(
     ).order_by('-created_at')
 
     qs = Subscription.objects.filter(user=request.auth).prefetch_related(
-        Prefetch('events', queryset=price_events_qs, to_attr='price_events')
+        Prefetch('events', queryset=price_events_qs, to_attr='price_events'),
+        'shares'
     )
     if status:
         qs = qs.filter(status=status)
@@ -120,6 +137,17 @@ def create_subscription(request, data: SubscriptionCreate):
         notes=data.notes,
         tags=data.tags or [],
     )
+
+    if data.shares:
+        total_shares = sum((s.share_amount for s in data.shares), Decimal('0'))
+        if total_shares > data.amount:
+            raise ValueError(f"Total split amounts ({total_shares}) cannot exceed subscription amount ({data.amount})")
+        for s in data.shares:
+            SubscriptionShare.objects.create(
+                subscription=sub,
+                shared_with_name=s.shared_with_name,
+                share_amount=s.share_amount
+            )
 
     SubscriptionEvent.objects.create(
         subscription=sub,
@@ -149,15 +177,19 @@ def get_summary(request):
 
     active_subs = list(
         Subscription.objects.filter(user=request.auth, status='active')
-        .only('id', 'name', 'amount', 'currency', 'billing_frequency', 'next_renewal_date', 'category')
+        .prefetch_related('shares')
     )
 
     today = timezone.now().date()
     week_later = today + timedelta(days=7)
     month_later = today + timedelta(days=30)
 
-    m_total = sum(monthly_cost(float(s.amount), s.billing_frequency) for s in active_subs)
-    y_projected = sum(annual_cost(float(s.amount), s.billing_frequency) for s in active_subs)
+    def _get_your_share(s):
+        sh_sum = sum((sh.share_amount for sh in s.shares.all()), Decimal('0'))
+        return max(Decimal('0'), s.amount - sh_sum)
+
+    m_total = sum(monthly_cost(float(_get_your_share(s)), s.billing_frequency) for s in active_subs)
+    y_projected = sum(annual_cost(float(_get_your_share(s)), s.billing_frequency) for s in active_subs)
     active_count = len(active_subs)
     categories_set = {s.category for s in active_subs}
     categories_count = len(categories_set)
@@ -168,7 +200,7 @@ def get_summary(request):
         c = s.category
         if c not in cat_map:
             cat_map[c] = {'category': c, 'total_monthly': 0.0, 'count': 0}
-        cat_map[c]['total_monthly'] += monthly_cost(float(s.amount), s.billing_frequency)
+        cat_map[c]['total_monthly'] += monthly_cost(float(_get_your_share(s)), s.billing_frequency)
         cat_map[c]['count'] += 1
 
     by_category = [
@@ -191,7 +223,7 @@ def get_summary(request):
             UpcomingItem(
                 id=s.id,
                 name=s.name,
-                amount=s.amount,
+                amount=_get_your_share(s),
                 currency=s.currency,
                 next_renewal_date=s.next_renewal_date,
                 category=s.category,
@@ -465,4 +497,42 @@ def mark_reviewed(request, sub_id: uuid.UUID):
     sub.updated_at = timezone.now()
     sub.save(update_fields=['updated_at'])
     return _to_subscription_out(sub)
+
+# ---------------------------------------------------------------------------
+# Subscription Shares Endpoints
+# ---------------------------------------------------------------------------
+
+@router.post('/{sub_id}/shares', response={200: SubscriptionShareOut, 400: dict})
+def create_subscription_share(request, sub_id: uuid.UUID, data: SubscriptionShareIn):
+    """Create a subscription share, verifying the sum of shares does not exceed subscription amount."""
+    sub = get_object_or_404(Subscription, id=sub_id, user=request.auth)
+    current_shares_sum = sum((s.share_amount for s in sub.shares.all()), Decimal('0'))
+    if current_shares_sum + data.share_amount > sub.amount:
+        return 400, {
+            'detail': f"Total split amounts ({current_shares_sum + data.share_amount}) cannot exceed subscription amount ({sub.amount})"
+        }
+
+    share = SubscriptionShare.objects.create(
+        subscription=sub,
+        shared_with_name=data.shared_with_name,
+        share_amount=data.share_amount
+    )
+    cache.delete(f"summary_{request.auth.id}")
+    return 200, share
+
+@router.get('/{sub_id}/shares', response=List[SubscriptionShareOut])
+def list_subscription_shares(request, sub_id: uuid.UUID):
+    """List all shares for a subscription."""
+    sub = get_object_or_404(Subscription, id=sub_id, user=request.auth)
+    return list(sub.shares.all())
+
+@router.delete('/{sub_id}/shares/{share_id}', response={200: MessageResponse, 404: dict})
+def delete_subscription_share(request, sub_id: uuid.UUID, share_id: uuid.UUID):
+    """Delete a subscription share."""
+    sub = get_object_or_404(Subscription, id=sub_id, user=request.auth)
+    share = get_object_or_404(SubscriptionShare, id=share_id, subscription=sub)
+    share.delete()
+    cache.delete(f"summary_{request.auth.id}")
+    return 200, {'message': 'Share deleted'}
+
 

@@ -17,7 +17,25 @@ import {
   Trash2,
   Sparkles,
   ExternalLink,
+  Bell,
+  BellRing,
+  BellOff,
 } from 'lucide-react';
+
+function urlBase64ToUint8Array(base64String: string) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
 
 interface SettingsData {
   currency: string;
@@ -48,6 +66,97 @@ export default function SettingsPage() {
   const [isSavingKey, setIsSavingKey] = useState(false);
   const [keyError, setKeyError] = useState<string | null>(null);
   const [keySuccess, setKeySuccess] = useState<string | null>(null);
+
+  // Web Push Notifications
+  const [pushSupported, setPushSupported] = useState(false);
+  const [pushPermission, setPushPermission] = useState<NotificationPermission>('default');
+  const [isPushSubscribed, setIsPushSubscribed] = useState(false);
+  const [isPushLoading, setIsPushLoading] = useState(false);
+  const [pushMessage, setPushMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window) {
+      setPushSupported(true);
+      if ('Notification' in window) {
+        setPushPermission(Notification.permission);
+      }
+      navigator.serviceWorker.ready
+        .then((reg) => {
+          reg.pushManager.getSubscription().then((sub) => {
+            setIsPushSubscribed(!!sub);
+          }).catch(() => {});
+        })
+        .catch(() => {});
+    }
+  }, []);
+
+  const handleTogglePush = async () => {
+    if (!pushSupported) {
+      alert('Browser Push Notifications are not supported in your current browser.');
+      return;
+    }
+
+    setIsPushLoading(true);
+    setPushMessage(null);
+
+    try {
+      const reg = await navigator.serviceWorker.ready;
+
+      if (isPushSubscribed) {
+        const sub = await reg.pushManager.getSubscription();
+        if (sub) {
+          const endpoint = sub.endpoint;
+          try {
+            await api.post('/api/notifications/unsubscribe', { endpoint });
+          } catch (e) {
+            console.warn('Backend unsubscribe warning:', e);
+          }
+          await sub.unsubscribe();
+        }
+        setIsPushSubscribed(false);
+        setPushMessage({ type: 'success', text: 'Browser push notifications have been disabled.' });
+      } else {
+        const perm = await Notification.requestPermission();
+        setPushPermission(perm);
+        if (perm !== 'granted') {
+          throw new Error('Notification permission was not granted by your browser.');
+        }
+
+        const vapidRes = await api.get<{ public_key: string }>('/api/notifications/vapid-public-key');
+        if (!vapidRes.public_key) {
+          throw new Error('Server did not return a valid VAPID public key.');
+        }
+
+        const convertedVapidKey = urlBase64ToUint8Array(vapidRes.public_key);
+        const sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: convertedVapidKey,
+        });
+
+        const subJson = sub.toJSON();
+        await api.post('/api/notifications/subscribe', {
+          endpoint: sub.endpoint,
+          p256dh_key: subJson.keys?.p256dh || '',
+          auth_key: subJson.keys?.auth || '',
+        });
+
+        setIsPushSubscribed(true);
+        setPushMessage({
+          type: 'success',
+          text: 'Push notifications activated! You will receive alerts 24 hours before your renewals.',
+        });
+      }
+    } catch (err: any) {
+      console.error('Failed to toggle push notifications:', err);
+      setPushMessage({
+        type: 'error',
+        text: err?.message || 'Failed to update push subscription.',
+      });
+    } finally {
+      setIsPushLoading(false);
+      setTimeout(() => setPushMessage(null), 5000);
+    }
+  };
 
   const fetchSettings = async () => {
     setIsLoading(true);
@@ -301,6 +410,83 @@ export default function SettingsPage() {
             </Button>
           </div>
         </form>
+      </div>
+
+      {/* SECTION: BROWSER PUSH NOTIFICATIONS */}
+      <div className="rounded-2xl glass-card border border-white/10 p-6 space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-white/5">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+              <Bell className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-white tracking-tight">Browser Push Notifications</h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Receive native desktop and mobile renewal reminders 24h in advance
+              </p>
+            </div>
+          </div>
+
+          <div>
+            {isPushSubscribed ? (
+              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Subscribed</span>
+              </span>
+            ) : pushPermission === 'denied' ? (
+              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 border border-rose-500/30 text-rose-300 flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5" />
+                <span>Blocked in Browser</span>
+              </span>
+            ) : (
+              <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-500/10 border border-slate-500/30 text-slate-400">
+                Disabled
+              </span>
+            )}
+          </div>
+        </div>
+
+        <p className="text-xs text-slate-300 leading-relaxed">
+          Stay on top of charges before they hit your bank card. When enabled, your browser will securely register a web push token to receive renewal notifications even when House of Subscriptions isn&apos;t open.
+        </p>
+
+        {pushMessage && (
+          <div
+            className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
+              pushMessage.type === 'success'
+                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
+                : 'bg-rose-500/10 border-rose-500/20 text-rose-300'
+            }`}
+          >
+            {pushMessage.type === 'success' ? (
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+            ) : (
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            )}
+            <span>{pushMessage.text}</span>
+          </div>
+        )}
+
+        <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <span className="text-xs font-bold text-white block">Renewal Alert Push Channel</span>
+            <span className="text-[11px] text-slate-400">
+              {isPushSubscribed
+                ? 'Active • Web Push notifications will trigger 24h prior to subscription renewals'
+                : 'Inactive • Click Enable to grant browser permission and receive instant alerts'}
+            </span>
+          </div>
+
+          <Button
+            variant={isPushSubscribed ? 'secondary' : 'primary'}
+            size="sm"
+            onClick={handleTogglePush}
+            isLoading={isPushLoading}
+            icon={isPushSubscribed ? <BellOff className="w-4 h-4" /> : <BellRing className="w-4 h-4" />}
+          >
+            {isPushSubscribed ? 'Disable Push Alerts' : 'Enable Push Notifications'}
+          </Button>
+        </div>
       </div>
 
       {/* SECTION 3: AI IMPORT KEY (BYOK) */}

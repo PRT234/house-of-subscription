@@ -107,3 +107,33 @@ class UserSettings(models.Model):
 
     def __str__(self):
         return f"Settings for {self.user.email}"
+
+
+class SubscriptionShare(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, related_name='shares')
+    shared_with_name = models.CharField(max_length=100)
+    share_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'subscription_shares'
+
+    def __str__(self):
+        return f"{self.shared_with_name} - {self.share_amount} for {self.subscription.name}"
+
+
+class PushSubscription(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='push_subscriptions')
+    endpoint = models.TextField()
+    p256dh_key = models.TextField()
+    auth_key = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'push_subscriptions'
+
+    def __str__(self):
+        return f"PushSubscription for {self.user.email} ({self.created_at})"
+

@@ -130,6 +130,11 @@ ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY') or 'g_kYoONNJJtZ76OpSmQP6hGAjQ-ao1I
 RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
 CRON_SECRET_KEY = os.getenv('CRON_SECRET_KEY', 'change-me-cron-secret')
 
+# Web Push (VAPID)
+VAPID_PUBLIC_KEY = os.getenv('VAPID_PUBLIC_KEY', 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjDCWJxoqqbdD4hAVPJcl2zS-BpOU=')
+VAPID_PRIVATE_KEY = os.getenv('VAPID_PRIVATE_KEY', 'x_T6uPZ6_e-0H52-m0gH4TfZ_hJg5e_U_u6xH9I2G8g=')
+VAPID_MAILTO = os.getenv('VAPID_MAILTO', 'mailto:admin@houseofsubscriptions.com')
+
 # Frontend URL
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
 

@@ -4,6 +4,32 @@ from uuid import UUID
 from datetime import date, datetime
 from decimal import Decimal
 
+class SubscriptionShareIn(BaseModel):
+    shared_with_name: str
+    share_amount: Decimal
+
+class SubscriptionShareOut(BaseModel):
+    id: UUID
+    shared_with_name: str
+    share_amount: Decimal
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class PushSubscriptionIn(BaseModel):
+    endpoint: str
+    p256dh_key: str
+    auth_key: str
+
+class PushSubscriptionOut(BaseModel):
+    id: UUID
+    endpoint: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
 class SubscriptionCreate(BaseModel):
     name: str
     amount: Decimal
@@ -17,6 +43,7 @@ class SubscriptionCreate(BaseModel):
     payment_method: Optional[str] = None
     notes: Optional[str] = None
     tags: Optional[List[str]] = None
+    shares: Optional[List[SubscriptionShareIn]] = None
 
 class SubscriptionUpdate(BaseModel):
     name: Optional[str] = None
@@ -31,6 +58,7 @@ class SubscriptionUpdate(BaseModel):
     payment_method: Optional[str] = None
     notes: Optional[str] = None
     tags: Optional[List[str]] = None
+    shares: Optional[List[SubscriptionShareIn]] = None
 
 class SubscriptionOut(BaseModel):
     id: UUID
@@ -50,6 +78,8 @@ class SubscriptionOut(BaseModel):
     previous_amount: Optional[Decimal] = None
     price_increased: bool = False
     price_delta: Optional[Decimal] = None
+    shares: List[SubscriptionShareOut] = []
+    your_share: Optional[Decimal] = None
     created_at: datetime
     updated_at: datetime
 
