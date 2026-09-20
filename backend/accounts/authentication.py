@@ -1,6 +1,7 @@
 from ninja.security import HttpBearer
 from jose import jwt, JWTError
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from accounts.models import User
 
 class JWTAuth(HttpBearer):
@@ -12,5 +13,5 @@ class JWTAuth(HttpBearer):
                 return None
             user = User.objects.get(id=user_id)
             return user
-        except (JWTError, User.DoesNotExist):
+        except (JWTError, User.DoesNotExist, ValueError, ValidationError, TypeError):
             return None

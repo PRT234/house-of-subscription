@@ -6,11 +6,13 @@ from typing import List, Optional
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Prefetch
 from django.conf import settings
 from cryptography.fernet import Fernet
 import google.generativeai as genai
 from ninja import Router
+from ninja.errors import HttpError
 
 from accounts.authentication import JWTAuth
 from subscriptions.models import Subscription, SubscriptionEvent, KnownService, UserSettings, SubscriptionShare
@@ -122,48 +124,51 @@ def list_subscriptions(
 
 @router.post('/', response=SubscriptionOut)
 def create_subscription(request, data: SubscriptionCreate):
-    sub = Subscription.objects.create(
-        user=request.auth,
-        name=data.name,
-        amount=data.amount,
-        currency=data.currency,
-        billing_frequency=data.billing_frequency,
-        next_renewal_date=data.next_renewal_date,
-        category=data.category,
-        status=data.status,
-        is_trial=data.is_trial,
-        trial_end_date=data.trial_end_date,
-        payment_method=data.payment_method,
-        notes=data.notes,
-        tags=data.tags or [],
-    )
-
     if data.shares:
         total_shares = sum((s.share_amount for s in data.shares), Decimal('0'))
         if total_shares > data.amount:
-            raise ValueError(f"Total split amounts ({total_shares}) cannot exceed subscription amount ({data.amount})")
-        for s in data.shares:
-            SubscriptionShare.objects.create(
-                subscription=sub,
-                shared_with_name=s.shared_with_name,
-                share_amount=s.share_amount
-            )
+            raise HttpError(400, f"Total split amounts ({total_shares}) cannot exceed subscription amount ({data.amount})")
 
-    SubscriptionEvent.objects.create(
-        subscription=sub,
-        user=request.auth,
-        event_type='created',
-        new_value={
-            'id': str(sub.id),
-            'name': sub.name,
-            'amount': str(sub.amount),
-            'currency': sub.currency,
-            'billing_frequency': sub.billing_frequency,
-            'next_renewal_date': str(sub.next_renewal_date),
-            'category': sub.category,
-            'status': sub.status,
-        }
-    )
+    with transaction.atomic():
+        sub = Subscription.objects.create(
+            user=request.auth,
+            name=data.name,
+            amount=data.amount,
+            currency=data.currency,
+            billing_frequency=data.billing_frequency,
+            next_renewal_date=data.next_renewal_date,
+            category=data.category,
+            status=data.status,
+            is_trial=data.is_trial,
+            trial_end_date=data.trial_end_date,
+            payment_method=data.payment_method,
+            notes=data.notes,
+            tags=data.tags or [],
+        )
+
+        if data.shares:
+            for s in data.shares:
+                SubscriptionShare.objects.create(
+                    subscription=sub,
+                    shared_with_name=s.shared_with_name,
+                    share_amount=s.share_amount
+                )
+
+        SubscriptionEvent.objects.create(
+            subscription=sub,
+            user=request.auth,
+            event_type='created',
+            new_value={
+                'id': str(sub.id),
+                'name': sub.name,
+                'amount': str(sub.amount),
+                'currency': sub.currency,
+                'billing_frequency': sub.billing_frequency,
+                'next_renewal_date': str(sub.next_renewal_date),
+                'category': sub.category,
+                'status': sub.status,
+            }
+        )
 
     cache.delete(f"summary_{request.auth.id}")
     return _to_subscription_out(sub)
@@ -332,7 +337,8 @@ def search_subscriptions(request, data: SearchRequest):
         return [_to_subscription_out(s) for s in all_subs]
 
     # Resolve Gemini API key (BYOK or platform key)
-    user_settings, _ = UserSettings.objects.get_or_create(user=request.auth)
+    from subscriptions.services import get_ai_quota_settings
+    user_settings = get_ai_quota_settings(request.auth)
     api_key = None
     if user_settings.gemini_api_key_encrypted:
         try:

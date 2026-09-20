@@ -40,7 +40,8 @@ def import_statement(request, file: UploadedFile = File(...)):
         return 400, {'detail': 'The uploaded statement appears to be empty or contains no readable text.'}
 
     # 2. BYOK / Quota verification
-    user_settings, _ = UserSettings.objects.get_or_create(user=request.auth)
+    from subscriptions.services import get_ai_quota_settings
+    user_settings = get_ai_quota_settings(request.auth)
     api_key = None
 
     if user_settings.gemini_api_key_encrypted:

@@ -15,7 +15,7 @@ router = Router(tags=['Jobs'])
 @router.post('/run-daily', response={200: dict, 401: dict})
 def run_daily_jobs(request):
     auth_header = request.headers.get("Authorization", "")
-    expected = f"Bearer {getattr(settings, 'CRON_SECRET_KEY', 'change-me-cron-secret')}"
+    expected = f"Bearer {settings.CRON_SECRET_KEY}"
     if not hmac.compare_digest(auth_header, expected):
         return 401, {'detail': 'Unauthorized'}
 

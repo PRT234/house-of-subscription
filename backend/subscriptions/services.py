@@ -38,3 +38,22 @@ def send_resend_email(to_email: str, subject: str, text_content: str) -> bool:
     except Exception as e:
         print(f"[RESEND ERROR] Failed to send email to {to_email}: {str(e)}")
         return False
+
+from django.utils import timezone
+
+def get_ai_quota_settings(user):
+    """Fetch or create UserSettings for a user, resetting the monthly AI import
+    counter if the calendar month has rolled over since the last reset."""
+    from subscriptions.models import UserSettings
+    user_settings, _ = UserSettings.objects.get_or_create(user=user)
+    now = timezone.now()
+    needs_reset = (
+        user_settings.ai_imports_reset_at is None
+        or user_settings.ai_imports_reset_at.year != now.year
+        or user_settings.ai_imports_reset_at.month != now.month
+    )
+    if needs_reset:
+        user_settings.ai_imports_used = 0
+        user_settings.ai_imports_reset_at = now
+        user_settings.save(update_fields=['ai_imports_used', 'ai_imports_reset_at'])
+    return user_settings

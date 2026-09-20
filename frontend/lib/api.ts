@@ -49,9 +49,10 @@ class ApiClient {
     }
 
     const token = this.getToken();
+    const isFormData = customConfig.body instanceof FormData;
     const reqHeaders: Record<string, string> = {
-      'Content-Type': 'application/json',
       Accept: 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...(headers as Record<string, string>),
     };
 
@@ -96,10 +97,11 @@ class ApiClient {
   }
 
   post<T>(endpoint: string, body?: any, options?: RequestOptions): Promise<T> {
+    const isFormData = body instanceof FormData;
     return this.request<T>(endpoint, {
       ...options,
       method: 'POST',
-      body: body ? JSON.stringify(body) : undefined,
+      body: isFormData ? body : (body ? JSON.stringify(body) : undefined),
     });
   }
 

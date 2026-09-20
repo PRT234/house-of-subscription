@@ -31,7 +31,8 @@ class KeyStatusOut(Schema):
 
 @router.get('/', response=SettingsOut)
 def get_settings(request):
-    user_settings, _ = UserSettings.objects.get_or_create(user=request.auth)
+    from subscriptions.services import get_ai_quota_settings
+    user_settings = get_ai_quota_settings(request.auth)
     return SettingsOut(
         currency=user_settings.currency or 'INR',
         reminder_days=user_settings.reminder_days,

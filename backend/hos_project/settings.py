@@ -80,6 +80,12 @@ if DB_HOST:
         }
     }
 else:
+    import warnings
+    warnings.warn(
+        "DB_HOST is not set — falling back to local SQLite. This is expected for local "
+        "development, but if you see this in a deployed environment, your database is "
+        "not connected and data will not persist."
+    )
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -109,11 +115,15 @@ else:
     }
 
 # CORS
-CORS_ALLOWED_ORIGINS = [
-    os.getenv('FRONTEND_URL', 'http://localhost:3000').rstrip('/'),
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-]
+if DEBUG:
+    CORS_ALLOWED_ORIGINS = [
+        os.getenv('FRONTEND_URL', 'http://localhost:3000').rstrip('/'),
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+    ]
+else:
+    frontend_url = os.getenv('FRONTEND_URL', '').rstrip('/')
+    CORS_ALLOWED_ORIGINS = [frontend_url] if frontend_url else []
 CORS_ALLOW_CREDENTIALS = True
 
 # JWT Settings (custom, not Django's session auth)
@@ -141,12 +151,25 @@ ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY', '')
 
 # Resend (for later passes)
 RESEND_API_KEY = os.getenv('RESEND_API_KEY', '')
-CRON_SECRET_KEY = os.getenv('CRON_SECRET_KEY', 'change-me-cron-secret')
+from django.core.exceptions import ImproperlyConfigured
+
+CRON_SECRET_KEY = os.getenv('CRON_SECRET_KEY', '')
+if not DEBUG and not CRON_SECRET_KEY:
+    raise ImproperlyConfigured("CRON_SECRET_KEY must be set via environment variable when DEBUG=False.")
+if not CRON_SECRET_KEY:
+    CRON_SECRET_KEY = 'dev-only-insecure-cron-secret-do-not-deploy'
 
 # Web Push (VAPID)
-VAPID_PUBLIC_KEY = os.getenv('VAPID_PUBLIC_KEY', 'BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjDCWJxoqqbdD4hAVPJcl2zS-BpOU=')
-VAPID_PRIVATE_KEY = os.getenv('VAPID_PRIVATE_KEY', 'x_T6uPZ6_e-0H52-m0gH4TfZ_hJg5e_U_u6xH9I2G8g=')
+VAPID_PUBLIC_KEY = os.getenv('VAPID_PUBLIC_KEY', '')
+VAPID_PRIVATE_KEY = os.getenv('VAPID_PRIVATE_KEY', '')
 VAPID_MAILTO = os.getenv('VAPID_MAILTO', 'mailto:admin@houseofsubscriptions.com')
+
+if not DEBUG and (not VAPID_PUBLIC_KEY or not VAPID_PRIVATE_KEY):
+    import warnings
+    warnings.warn(
+        "VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY are not set. Web Push notifications will "
+        "silently fail. Generate your own keypair with: python manage.py generate_vapid_keys"
+    )
 
 # Frontend URL
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000')
